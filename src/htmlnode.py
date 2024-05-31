@@ -8,16 +8,18 @@ class HTMLNode:
         value: str | None = None,
         children: list[HTMLNode] | None = None,
         props: dict[str, str] | None = None,
-    ):
+    ) -> None:
         self.tag = tag
         self.value = value
-        self.children = children if children is not None else []
-        self.props = props if props is not None else {}
+        self.children = children
+        self.props = props
 
     def to_html(self):
         raise NotImplementedError
 
     def props_to_html(self) -> str:
+        if not self.props:
+            return ""
         func = lambda prop: f'{prop[0]}="{prop[1]}"'
         props = list(map(func, self.props.items()))
         return " ".join(props)
