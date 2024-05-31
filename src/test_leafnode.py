@@ -8,7 +8,10 @@ class TestLeafNode(unittest.TestCase):
     def setUp(self) -> None:
         self.p_tag = "p"
         self.p_value = "This is a paragraph."
-        self.p_props = {"id": "para"}
+        self.p_props = {"id": "para", "class": "para-class"}
+        self.a_tag = "a"
+        self.a_value = "Click me!"
+        self.a_props = {"href": "https://www.google.com"}
 
     def test_to_html_vars(self):
         """
@@ -27,13 +30,19 @@ class TestLeafNode(unittest.TestCase):
         Verify that the to_html method returns the correct HTML string.
         """
         # Arrange
-        leafnode = LeafNode(self.p_tag, self.p_value, self.p_props)
+        leafnode1 = LeafNode(self.p_tag, self.p_value, self.p_props)
+        leafnode2 = LeafNode(self.a_tag, self.a_value, self.a_props)
         # Act
-        html = leafnode.to_html()
+        html1 = leafnode1.to_html()
+        html2 = leafnode2.to_html()
         # Assert
         self.assertEqual(
-            html,
-            f'<{self.p_tag} id="{self.p_props["id"]}">{self.p_value}</{self.p_tag}>',
+            html1,
+            f'<{self.p_tag} id="{self.p_props["id"]}" class="{self.p_props["class"]}">{self.p_value}</{self.p_tag}>',
+        )
+        self.assertEqual(
+            html2,
+            f'<{self.a_tag} href="{self.a_props["href"]}">{self.a_value}</{self.a_tag}>',
         )
 
     def test_to_html_value_error(self):
