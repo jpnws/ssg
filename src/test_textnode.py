@@ -15,11 +15,11 @@ class TestTextNode(unittest.TestCase):
         Test that the TextNode instance variables are correctly set.
         """
         # Arrange / Act
-        node1 = TextNode(self.text, self.text_type1, self.url)
+        node = TextNode(self.text, self.text_type1, self.url)
         # Assert
-        self.assertEqual(node1.text, self.text)
-        self.assertEqual(node1.text_type, self.text_type1)
-        self.assertEqual(node1.url, self.url)
+        self.assertEqual(node.text, self.text)
+        self.assertEqual(node.text_type, self.text_type1)
+        self.assertEqual(node.url, self.url)
 
     def test_eq(self):
         """
@@ -46,9 +46,21 @@ class TestTextNode(unittest.TestCase):
         Test that the url attribute is None when not provided.
         """
         # Arrange / Act
-        node1 = TextNode(self.text, self.text_type1)
+        node = TextNode(self.text, self.text_type1)
         # Assert
-        self.assertIsNone(node1.url)
+        self.assertIsNone(node.url)
+
+    def test_repr(self):
+        """
+        Test the __repr__ method to ensure it returns the correct string.
+        """
+        # Arrange
+        node = TextNode(self.text, self.text_type1, self.url)
+        expected_repr = f"TextNode({self.text}, {self.text_type1}, {self.url})"
+        # Act
+        actual_repr = repr(node)
+        # Assert
+        self.assertEqual(actual_repr, expected_repr)
 
 
 if __name__ == "__main__":
