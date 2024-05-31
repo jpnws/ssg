@@ -12,7 +12,7 @@ class TestLeafNode(unittest.TestCase):
 
     def test_to_html_vars(self):
         """
-        Test for the instance variables.
+        Make sure that the LeafNode instance variables are correctly set.
         """
         # Arrange / Act
         leafnode = LeafNode(self.p_tag, self.p_value, self.p_props)
@@ -24,7 +24,7 @@ class TestLeafNode(unittest.TestCase):
 
     def test_to_html_output(self):
         """
-        Test for the full HTML string returned by to_html.
+        Verify that the to_html method returns the correct HTML string.
         """
         # Arrange
         leafnode = LeafNode(self.p_tag, self.p_value, self.p_props)
@@ -38,7 +38,7 @@ class TestLeafNode(unittest.TestCase):
 
     def test_to_html_value_error(self):
         """
-        Test for the ValueError exception when value is None.
+        Check that to_html raises a ValueError when value is None.
         """
         # Arrange / Act
         leafnode = LeafNode(self.p_tag, None, self.p_props)
@@ -48,7 +48,7 @@ class TestLeafNode(unittest.TestCase):
 
     def test_to_html_plain_text_output(self):
         """
-        Test for the plain text value when tag is empty or None.
+        Be sure that to_html returns plain text when the tag is None or empty.
         """
         # Arrange
         leafnode = LeafNode(None, self.p_value, self.p_props)
