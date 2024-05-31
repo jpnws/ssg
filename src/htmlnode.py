@@ -2,6 +2,7 @@ from __future__ import annotations
 
 
 class HTMLNode:
+
     def __init__(
         self,
         tag: str | None = None,

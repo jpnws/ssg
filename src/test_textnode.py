@@ -4,6 +4,7 @@ from textnode import TextNode
 
 
 class TestTextNode(unittest.TestCase):
+
     def setUp(self) -> None:
         self.text = "This is a text node"
         self.text_type1 = "bold"
