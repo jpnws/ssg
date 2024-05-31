@@ -5,15 +5,66 @@ from htmlnode import HTMLNode
 
 class TestHTMLNode(unittest.TestCase):
 
+    def setUp(self) -> None:
+        self.div_tag = "div"
+        self.div_value = "Hello, World!"
+        self.div_props1 = {"class": "container"}
+        self.div_props2 = {"class": "container", "id": "main"}
+
     def test_init(self):
-        html_node = HTMLNode("div", "Hello, World!", [], {"class": "container"})
-        self.assertEqual(html_node.tag, "div")
-        self.assertEqual(html_node.value, "Hello, World!")
-        self.assertEqual(html_node.children, [])
-        self.assertEqual(html_node.props, {"class": "container"})
+        """
+        Test that the HTMLNode instance variables are correctly set.
+        """
+        # Arrange / Act
+        node = HTMLNode(self.div_tag, self.div_value, [], self.div_props1)
+        # Assert
+        self.assertEqual(node.tag, self.div_tag)
+        self.assertEqual(node.value, self.div_value)
+        self.assertEqual(node.children, [])
+        self.assertEqual(node.props, self.div_props1)
+
+    def test_not_implemented_error(self):
+        """
+        Test that the to_html method raises NotImplementedError.
+        """
+        # Arrange
+        node = HTMLNode(None, None, None, None)
+        # Act / Assert
+        with self.assertRaises(NotImplementedError):
+            node.to_html()
 
     def test_props_to_html(self):
-        html_node = HTMLNode(None, None, [], {"class": "container"})
-        self.assertEqual(html_node.props_to_html(), 'class="container"')
-        html_node = HTMLNode(None, None, [], {"class": "container", "id": "main"})
-        self.assertEqual(html_node.props_to_html(), 'class="container" id="main"')
+        """
+        Test that the props_to_html method returns the correct string.
+        """
+        # Arrange / Act
+        node1 = HTMLNode(None, None, [], self.div_props1)
+        node2 = HTMLNode(None, None, [], self.div_props2)
+        # Assert
+        self.assertEqual(node1.props_to_html(), f'class="{self.div_props1["class"]}"')
+        self.assertEqual(
+            node2.props_to_html(),
+            f'class="{self.div_props2["class"]}" id="{self.div_props2["id"]}"',
+        )
+
+    def test_repr(self):
+        """
+        Test that the repr returns the correct string.
+        """
+        # Arrange
+        sub_node = [HTMLNode("p", "This is a paragraph.", None, None)]
+        # Act
+        node = HTMLNode(self.div_tag, self.div_value, sub_node, self.div_props2)
+        res = repr(node)
+        # Assert
+        self.assertEqual(
+            res,
+            f"""
+        HTMLNode(
+            tag={self.div_tag},
+            value={self.div_value},
+            children={sub_node}
+            props={self.div_props2}
+        )
+        """,
+        )
