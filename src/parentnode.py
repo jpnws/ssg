@@ -25,7 +25,7 @@ class ParentNode(HTMLNode):
             raise ValueError("Tag must be provided.")
         if not self.children:
             raise ValueError("Children nodes must be provided.")
-        nodes = []
+        nodes : list[str]  = []
         for node in self.children:
             # Recursion happens here because `node.to_html` calls its own
             # childrens' `to_html` as well.

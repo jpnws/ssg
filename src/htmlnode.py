@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Callable
+
 
 class HTMLNode:
 
@@ -15,7 +17,7 @@ class HTMLNode:
         self.children = children
         self.props = props
 
-    def to_html(self):
+    def to_html(self) -> str:
         """
         Converts the LeafNode object to an HTML string. Note: Not implemented as
         the children classes should override the method.
@@ -36,7 +38,9 @@ class HTMLNode:
         """
         if not self.props:
             return ""
-        func = lambda prop: f'{prop[0]}="{prop[1]}"'
+        func: Callable[[tuple[str, str | None]], str] = (
+            lambda prop: f'{prop[0]}="{prop[1]}"'
+        )
         props = list(map(func, self.props.items()))
         return " ".join(props)
 
