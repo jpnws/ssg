@@ -6,10 +6,10 @@ from htmlnode import HTMLNode
 class TestHTMLNode(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.div_tag = "div"
-        self.div_value = "Hello, World!"
-        self.div_props1 = {"class": "container"}
-        self.div_props2 = {"class": "container", "id": "main"}
+        self.div_tag: str = "div"
+        self.div_value: str = "Hello, World!"
+        self.div_props1: dict[str, str | None] = {"class": "container"}
+        self.div_props2: dict[str, str | None] = {"class": "container", "id": "main"}
 
     def test_init(self):
         """

@@ -6,12 +6,12 @@ from leafnode import LeafNode
 class TestLeafNode(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.p_tag = "p"
-        self.p_value = "This is a paragraph."
-        self.p_props = {"id": "para", "class": "para-class"}
-        self.a_tag = "a"
-        self.a_value = "Click me!"
-        self.a_props = {"href": "https://www.google.com"}
+        self.p_tag: str = "p"
+        self.p_value: str = "This is a paragraph."
+        self.p_props: dict[str, str | None] = {"id": "para", "class": "para-class"}
+        self.a_tag: str = "a"
+        self.a_value: str = "Click me!"
+        self.a_props: dict[str, str | None] = {"href": "https://www.google.com"}
 
     def test_to_html_vars(self):
         """
