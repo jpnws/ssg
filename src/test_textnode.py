@@ -6,10 +6,10 @@ from textnode import TextNode
 class TestTextNode(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.text = "This is a text node"
-        self.text_type1 = "bold"
-        self.text_type2 = "italic"
-        self.url = "https://www.github.com"
+        self.text: str = "This is a text node"
+        self.text_type1: str = "bold"
+        self.text_type2: str = "italic"
+        self.url: str = "https://www.github.com"
 
     def test_init(self):
         """
