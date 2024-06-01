@@ -54,7 +54,6 @@ class TestParentNode(unittest.TestCase):
         )
         # Act
         res = node3.to_html()
-        print(res)
         # Assert
         self.assertEqual(
             res,
