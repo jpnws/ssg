@@ -13,4 +13,6 @@ class LeafNode(HTMLNode):
             raise ValueError("LeafNode `value` must be provided.")
         if not self.tag:
             return self.value
-        return f"<{self.tag} {self.props_to_html()}>{self.value}</{self.tag}>"
+        props = self.props_to_html()
+        start_tag = f"<{self.tag} {props}>" if props else f"<{self.tag}>"
+        return f"{start_tag}{self.value}</{self.tag}>"
