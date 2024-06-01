@@ -9,6 +9,15 @@ class LeafNode(HTMLNode):
         super().__init__(tag, value, None, props)
 
     def to_html(self):
+        """
+        Converts the LeafNode object to an HTML string.
+
+        Returns:
+            str: The HTML representation of the LeafNode object.
+
+        Raises:
+            ValueError: If the `value` attribute of the LeafNode is not provided.
+        """
         if not self.value:
             raise ValueError("LeafNode `value` must be provided.")
         if not self.tag:
