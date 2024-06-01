@@ -4,6 +4,9 @@ from leafnode import LeafNode
 
 
 def text_node_to_html_node(text_node: TextNode) -> HTMLNode:
+    """
+    Convert TextNode to HTMLNode/LeafNode.
+    """
     if text_node.text_type == "text":
         return LeafNode(None, text_node.text)
     if text_node.text_type == "bold":
