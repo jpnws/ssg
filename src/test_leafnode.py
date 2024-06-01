@@ -65,3 +65,7 @@ class TestLeafNode(unittest.TestCase):
         res = leafnode.to_html()
         # Assert
         self.assertEqual(res, self.p_value)
+
+
+if __name__ == "__main__":
+    unittest.main()

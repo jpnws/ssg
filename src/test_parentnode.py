@@ -59,3 +59,7 @@ class TestParentNode(unittest.TestCase):
             res,
             "<div><div><p><b>Bold text</b></p>Normal text</div><i>italic text</i></div>",
         )
+
+
+if __name__ == "__main__":
+    unittest.main()
