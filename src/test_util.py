@@ -19,7 +19,7 @@ class TestUtil(unittest.TestCase):
         node4 = TextNode("code text", "code")
         node5 = TextNode("link text", "link", "https://www.google.com")
         node6 = TextNode("alt text", "image", "https://www.google.com")
-        node7 = TextNode("invalid tpe", "invalid")
+        node7 = TextNode("invalid type", "invalid")
         # Act
         res1 = text_node_to_html_node(node1)
         res2 = text_node_to_html_node(node2)
