@@ -1,6 +1,6 @@
 import unittest
 
-from util import text_node_to_html_node
+from util import text_node_to_html_node, split_nodes_delimiter
 
 from textnode import TextNode
 from htmlnode import HTMLNode
@@ -53,3 +53,17 @@ class TestUtil(unittest.TestCase):
         )
         with self.assertRaises(ValueError):
             text_node_to_html_node(node7)
+
+    def test_split_nodes_delimiter(self):
+        """
+        Test splitting a TextNode into multiple TextNodes by a delimiter.
+        """
+        # Arrange
+        node = TextNode("This is text with a `code block` word", "text")
+        actual_nodes = split_nodes_delimiter([node], "`", "code")
+        expected_nodes = [
+            TextNode("This is text with a ", "text"),
+            TextNode("code block", "code"),
+            TextNode(" word", "text"),
+        ]
+        self.assertListEqual(actual_nodes, expected_nodes)
