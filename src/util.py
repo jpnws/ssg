@@ -33,4 +33,39 @@ def split_nodes_delimiter(
     old_nodes: list[TextNode], delimiter: str, text_type: str
 ) -> list[TextNode]:
     ret: list[TextNode] = []
+    for node in old_nodes:
+        if node.text_type != "text":
+            ret.append(node)
+        else:
+            ret.extend(splitter(node.text, delimiter, text_type))
     return ret
+
+
+def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
+    start_found = False
+    segments: list[TextNode] = []
+    normal_segment: str = ""
+    delim_segment: str = ""
+    index = 0
+    while index < len(text):
+        if text[index : index + len(delim)] == delim:
+            if start_found:
+                start_found = False
+                segments.append(TextNode(delim_segment, text_type))
+                delim_segment = ""
+            else:
+                start_found = True
+                segments.append(TextNode(normal_segment, "text"))
+                normal_segment = ""
+        else:
+            if start_found:
+                delim_segment += text[index]
+            else:
+                normal_segment += text[index]
+        if index == len(text) - 1 and not start_found and normal_segment:
+            segments.append(TextNode(normal_segment, "text"))
+        if text[index : index + len(delim)] == delim:
+            index += len(delim)
+        else:
+            index += 1
+    return segments
