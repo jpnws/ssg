@@ -142,11 +142,10 @@ class TestUtil(unittest.TestCase):
         markdown syntax where delimiter has not been ended properly.
         """
         # Arrange
-        node = TextNode("**bold string", "text")
+        node = TextNode("**bold** `code` **bold", "text")
         # Act / Assert
         with self.assertRaises(ValueError):
-            res = split_nodes_delimiter([node], "**", "bold")
-            print(res)
+            split_nodes_delimiter([node], "**", "bold")
 
     def test_split_nodes_delimiter_with_non_text_type(self):
         """
