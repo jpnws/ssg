@@ -136,6 +136,23 @@ class TestUtil(unittest.TestCase):
         # Assert
         self.assertListEqual(actual_nodes, expected_nodes)
 
+    def test_split_nodes_delimiter_adjacent_delim_text(self):
+        """
+        Test splitting a TextNode into multiple TextNodes by a delimiter,
+        where there are two adjacent delimited text segements.
+        """
+        # Arrange
+        node = TextNode("**bold1****bold2**`code`", "text")
+        # Act
+        actual_nodes = split_nodes_delimiter([node], "**", "bold")
+        expected_nodes = [
+            TextNode("bold1", "bold"),
+            TextNode("bold2", "bold"),
+            TextNode("`code`", "text"),
+        ]
+        # Assert
+        self.assertListEqual(actual_nodes, expected_nodes)
+
     def test_split_nodes_delimiter_without_end_delimiter(self):
         """
         Test splitting a TextNode, but the target TextNode has an invalid
