@@ -61,8 +61,11 @@ def split_nodes_delimiter(
     ret: list[TextNode] = []
     for node in old_nodes:
         if node.text_type != "text":
+            # Append the TextNode as-is if its type is not text.
             ret.append(node)
         else:
+            # Otherwise process the TextNode and extend the main TextNodes list
+            # with the processed TextNodes list.
             ret.extend(splitter(node.text, delimiter, text_type))
     return ret
 
@@ -93,6 +96,7 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
         #     TextNode(" word", "text"),
         # ]
     """
+    # All the TextNode segments are stored here for later return.
     segments: list[TextNode] = []
     # Used for identifying opening and ending of delimited text.
     delim_start_found = False
@@ -103,7 +107,7 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
     # for example. This will be reset to empty string after finding the closing
     # delimiter.
     delim_segment = ""
-
+    # Keep track of the index position in the target text string.
     index = 0
     while index < len(text):
         # In this `while` block, the program will loop until `index` hits the
