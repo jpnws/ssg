@@ -251,6 +251,19 @@ class TestUtil(unittest.TestCase):
         # Assert
         self.assertListEqual(actual, expected)
 
+    def test_split_nodes_image_no_image_mix(self):
+        """
+        Test that TextNodes are split by imagines in the markdown and that the
+        function returns a list of TextNodes with extracted markdown images and
+        TextNodes that did not have any markdown image syntax.
+        """
+        # Arrange
+        node1 = TextNode("![image](https://picsum.photos/200) is a photo.", "text")
+        node2 = TextNode("This does not have an markdown image syntax.", "text")
+        # Act
+        actual = split_nodes_image([node1, node2])
+        expected = []
+
     def test_split_nodes_link(self):
         """
         Test that TextNodes are split by links in markdown text.
