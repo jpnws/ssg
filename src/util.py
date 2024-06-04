@@ -232,3 +232,11 @@ def extract_markdown_links(text: str) -> list[tuple[str, str]]:
     r = r"\[(.*?)\]\((.*?)\)"
     ret = re.findall(r, text)
     return ret
+
+
+def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
+    pass
+
+
+def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
+    pass
