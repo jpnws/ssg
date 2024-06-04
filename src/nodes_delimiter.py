@@ -17,16 +17,18 @@ def split_nodes_delimiter(
     into multiple TextNodes of the specified type.
 
     Args:
-        old_nodes (list[TextNode]): List of TextNode objects to be processed.
-        delimiter (str): The delimiter string used to split the text. text_type
-        (str): The type of TextNode to create for the text between delimiters.
+        - old_nodes (list[TextNode]): List of TextNode objects to be processed.
+        - delimiter (str): The delimiter string used to split the text.
+        - text_type (str): The type of TextNode to create for the text between
+          delimiters.
 
     Returns:
-        list[TextNode]: A new list of TextNode objects, split based on the given
+        - list[TextNode]: A new list of TextNode objects, split based on the
+          given
         delimiter.
 
     Raises:
-        ValueError: If a matching closing delimiter is not found in the text.
+        - ValueError: If a matching closing delimiter is not found in the text.
 
     Example:
         node = TextNode("This is text with a `code block` word", "text")
@@ -56,15 +58,17 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
     segments into TextNode objects.
 
     Args:
-        text (str): The text to be split. delim (str): The delimiter string used
-        to split the text. text_type (str): The type of TextNode to create for
-        the text between delimiters.
+        - text (str): The text to be split.
+        - delim (str): The delimiter string used to split the text.
+        - text_type (str): The type of TextNode to create for the text between
+          delimiters.
 
     Returns:
-        list[TextNode]: A list of TextNode objects created from the split text.
+        - list[TextNode]: A list of TextNode objects created from the split
+          text.
 
     Raises:
-        ValueError: If a matching closing delimiter is not found in the text.
+        - ValueError: If a matching closing delimiter is not found in the text.
 
     Example:
         text = "This is text with a `code block` word"
@@ -198,17 +202,19 @@ def get_delim_repeat_count(text: str, delim: str, index: int) -> int:
     a given index in the text.
 
     Args:
-        text (str): The text to be analyzed for repeated delimiters. delim
-        (str): The delimiter string to count repetitions of. index (int): The
-        starting index in the text to begin counting from.
+        - text (str): The text to be analyzed for repeated delimiters.
+        - delim (str): The delimiter string to count repetitions of.
+        - index (int): The starting index in the text to begin counting from.
 
     Returns:
-        int: The count of consecutive delimiter repetitions.
+        - int: The count of consecutive delimiter repetitions.
 
     Example:
-        count = get_delim_repeat_count("**bold** text", "*", 0) # count will be
-        2 because there are two consecutive instances of the delimiter "*"
-        immediately following the index before breaking out of the loop.
+        count = get_delim_repeat_count("**bold** text", "*", 0)
+
+        # count will be 2 because there are two consecutive instances of the
+        delimiter "*" immediately following the index before breaking out of the
+        loop.
     """
     repeated_count = 1
     while index < len(text):
