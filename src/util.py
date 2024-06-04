@@ -1,3 +1,5 @@
+import re
+
 from textnode import TextNode
 from htmlnode import HTMLNode
 from leafnode import LeafNode
@@ -195,3 +197,15 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
     if delim_start_found:
         raise ValueError("Invalid markdown syntax.")
     return segments
+
+
+def extract_markdown_images(text: str) -> list[tuple[str, str]]:
+    r = r"!\[(.*?)\]\((.*?)\)"
+    ret = re.findall(r, text)
+    return ret
+
+
+def extract_markdown_links(text: str) -> list[tuple[str, str]]:
+    r = r"\[(.*?)\]\((.*?)\)"
+    ret = re.findall(r, text)
+    return ret
