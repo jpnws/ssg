@@ -5,7 +5,7 @@ from nodes_delimiter import split_nodes_delimiter
 from textnode import TextNode
 
 
-class TestUtil(unittest.TestCase):
+class TestNodesDelimiter(unittest.TestCase):
     def test_split_nodes_delimiter_code(self):
         """
         Test splitting a TextNode into multiple TextNodes by code delimiter.
