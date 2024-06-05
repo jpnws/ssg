@@ -216,13 +216,13 @@ def get_delim_repeat_count(text: str, delim: str, index: int) -> int:
         delimiter "*" immediately following the index before breaking out of the
         loop.
     """
-    repeated_count = 1
+    repeated_count = 0
     while index < len(text):
-        start_index = index + len(delim)
-        end_index = index + 2 * len(delim)
-        if text[start_index:end_index] == delim:
+        if text[index : index + len(delim)] == delim:
+            print(text[index : index + len(delim)])
             repeated_count += 1
         else:
             break
-        index = end_index
+        index += len(delim)
+    print(repeated_count)
     return repeated_count
