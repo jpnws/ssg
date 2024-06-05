@@ -210,8 +210,8 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
     # not find any ending delimiter; therefore, the markdown syntax is invalid.
     # For example, if the text "**bold string" is provided, we will have to
     # raise the ValueError because `**` does not close.
-    if delim_start_found:
-        raise ValueError("Invalid markdown syntax.")
+    # if delim_start_found:
+    #     raise ValueError("Invalid markdown syntax.")
     return segments
 
 
