@@ -97,9 +97,12 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
     prev_repeat_count = 0
     # Keep track of the index position in the target text string.
     index = 0
-    delim_count = count_delim(text, delim)
-    if delim_count % 2 != 0:
+    # If the total occurrences of the delimiter is not even that means there was
+    # no proper closing of the delimiter. Raise ValueError.
+    if count_delim(text, delim) % 2 != 0:
         raise ValueError("Invalid markdown syntax.")
+    # In the following `while` block, the program will loop until `index`
+    # hits the length of the target text string.
     while index < len(text):
         # Check if the current position in the text is the start of a delimiter
         # and that we are not already inside a delimited segment.
@@ -126,8 +129,6 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
                 was_repeated = True
                 prev_repeat_count = delim_repeat_count
                 index += len(delim) * delim_repeat_count
-        # In this `while` block, the program will loop until `index` hits the
-        # length of the target text string.
         if text[index : index + len(delim)] == delim:
             # If the program enters this block of code, it means that it is
             # currently at a certain position in the target text string where
