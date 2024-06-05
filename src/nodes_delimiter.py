@@ -91,12 +91,28 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
     # for example. This will be reset to empty string after finding the closing
     # delimiter.
     delim_segment = ""
+    # Keep track of whether there was a previous repeated non-delim sequence.
+    was_repeated = True
+    # Keep track of the non-delim repeat sequence count.
+    prev_repeat_count = 0
     # Keep track of the index position in the target text string.
     index = 0
+    delim_count = count_delim(text, delim)
+    if delim_count % 2 != 0:
+        raise ValueError("Invalid markdown syntax.")
     while index < len(text):
         # Check if the current position in the text is the start of a delimiter
         # and that we are not already inside a delimited segment.
         if text[index : index + len(delim)] == delim and not delim_start_found:
+            if was_repeated and prev_repeat_count > 1:
+                # If there was a previous repeat sequence and count is greater
+                # than one then just consider the next sequence to be matching
+                # non-delim repeats and consider them normal text.
+                normal_segment += text[index : index + len(delim) * prev_repeat_count]
+                # And then advance the index accordingly and reset vars.
+                index += len(delim) * prev_repeat_count
+                prev_repeat_count = 0
+                was_repeated = False
             # Determine how many times the delimiter is consecutively repeated
             # starting fom the current index position.
             delim_repeat_count = get_delim_repeat_count(text, delim, index)
@@ -107,6 +123,8 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
                 normal_segment += text[index : index + len(delim) * delim_repeat_count]
                 # Advance the index by the length of the repeated delimiter
                 # sequence.
+                was_repeated = True
+                prev_repeat_count = delim_repeat_count
                 index += len(delim) * delim_repeat_count
         # In this `while` block, the program will loop until `index` hits the
         # length of the target text string.
@@ -167,7 +185,8 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
                 # a part of the delimited string, then it is considered as a
                 # normal string; therefore, we concatenate the current substring
                 # to the `normal_segment`.
-                normal_segment += text[index]
+                if index < len(text):
+                    normal_segment += text[index]
         # Suppose that we reached the end of the target text string there was no
         # more delimiter found, then if there's anything in `normal_segment` it
         # means that the remaining text was a normal text, then create TextNode
@@ -219,10 +238,30 @@ def get_delim_repeat_count(text: str, delim: str, index: int) -> int:
     repeated_count = 0
     while index < len(text):
         if text[index : index + len(delim)] == delim:
-            print(text[index : index + len(delim)])
             repeated_count += 1
         else:
             break
         index += len(delim)
-    print(repeated_count)
     return repeated_count
+
+
+def count_delim(text: str, delim: str) -> int:
+    """
+    Count the total occurrences of the delimiter in the text.
+
+    Args:
+        - text (str): The text to be analyzed for counting occurrences of delim.
+        - delim (str): The delimiter string count.
+
+    Returns:
+        - int: total occurrences of the delimiter.
+    """
+    index = 0
+    count = 0
+    while index < len(text):
+        if text[index : index + len(delim)] == delim:
+            count += 1
+            index += len(delim)
+        else:
+            index += 1
+    return count
