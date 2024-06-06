@@ -1,11 +1,11 @@
 import unittest
 
-from nodes_delimiter import split_nodes_delimiter
+from split_delimiter import split_nodes_delimiter
 
 from textnode import TextNode
 
 
-class TestNodesDelimiter(unittest.TestCase):
+class TestSplitDelimiter(unittest.TestCase):
     def test_split_nodes_delimiter_code(self):
         """
         Test splitting a TextNode into multiple TextNodes by code delimiter.
