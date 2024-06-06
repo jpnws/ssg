@@ -5,6 +5,12 @@ from textnode import TextNode
 from extract_links import extract_markdown_images
 from extract_links import extract_markdown_links
 
+from util import (
+    text_type_text,
+    text_type_link,
+    text_type_image,
+)
+
 
 def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
     """
@@ -16,7 +22,7 @@ def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:
     Returns:
         - list[TextNode]: list of text nodes that have been split.
     """
-    return node_splitter(old_nodes, extract_markdown_images, "image")
+    return node_splitter(old_nodes, extract_markdown_images, text_type_image)
 
 
 def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
@@ -29,7 +35,7 @@ def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
     Returns:
         - list[TextNode]: list of text nodes that have been split.
     """
-    return node_splitter(old_nodes, extract_markdown_links, "link")
+    return node_splitter(old_nodes, extract_markdown_links, text_type_link)
 
 
 def node_splitter(
@@ -51,9 +57,9 @@ def node_splitter(
             continue
         for target_tuple in target_tuples:
             delim = ""
-            if text_type == "image":
+            if text_type == text_type_image:
                 delim = f"![{target_tuple[0]}]({target_tuple[1]})"
-            elif text_type == "link":
+            elif text_type == text_type_link:
                 delim = f"[{target_tuple[0]}]({target_tuple[1]})"
             # Use split method to separate normal text from markdown target.
             split_text = text.split(f"{delim}", 1)
@@ -61,7 +67,7 @@ def node_splitter(
             # then it must be a normal text segment; therefore, create a normal
             # text node for it.
             if split_text[0]:
-                new_nodes.append(TextNode(split_text[0], "text"))
+                new_nodes.append(TextNode(split_text[0], text_type_text))
             # Also, create a markdown target text node after that because we've
             # found the delimiter, so we can just use the existing target_tuple
             # values to create the markdown target text node.
@@ -77,7 +83,7 @@ def node_splitter(
         # make sure to consider normal text that follows the last markdown
         # syntax, we create TextNode out of the remain text (if non-empty).
         if text:
-            new_nodes.append(TextNode(text, "text"))
+            new_nodes.append(TextNode(text, text_type_text))
     return new_nodes
 
 
@@ -151,9 +157,9 @@ def node_splitter(
 #     for delim_tuple in delim_tuples:
 #         # Set the delimiter depending on the text type: either image or link.
 #         delim = ""
-#         if text_type == "image":
+#         if text_type == text_type_image:
 #             delim = f"![{delim_tuple[0]}]({delim_tuple[1]})"
-#         elif text_type == "link":
+#         elif text_type == text_type_link:
 #             delim = f"[{delim_tuple[0]}]({delim_tuple[1]})"
 #         # Step through the target text string.
 #         while i < len(text):
@@ -165,7 +171,7 @@ def node_splitter(
 #                 # it. So, if there's anything in the `normal_segment` then
 #                 # append it to new_nodes as a normal TextNode.
 #                 if normal_segment:
-#                     new_nodes.append(TextNode(normal_segment, "text"))
+#                     new_nodes.append(TextNode(normal_segment, text_type_text))
 #                 # And, since we've found the delimiter within the text, let's
 #                 # use the tuple items to create the TextNode, it would be either
 #                 # image or link text type.
@@ -204,5 +210,5 @@ def node_splitter(
 #             i += 1
 #         # And then, finally, we append that remaining text's `TextNode` to
 #         # new_nodes.
-#         new_nodes.append(TextNode(normal_segment, "text"))
+#         new_nodes.append(TextNode(normal_segment, text_type_text))
 #     return new_nodes

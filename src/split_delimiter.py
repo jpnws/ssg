@@ -1,12 +1,9 @@
 from textnode import TextNode
 
 
-text_type_text = "text"
-text_type_bold = "bold"
-text_type_italic = "italic"
-text_type_code = "code"
-text_type_link = "link"
-text_type_image = "image"
+from util import (
+    text_type_text,
+)
 
 
 def split_nodes_delimiter(
@@ -31,18 +28,18 @@ def split_nodes_delimiter(
         - ValueError: If a matching closing delimiter is not found in the text.
 
     Example:
-        node = TextNode("This is text with a `code block` word", "text")
-        new_nodes = split_nodes_delimiter([node], "`", "code")
+        node = TextNode("This is text with a `code block` word", text_type_text)
+        new_nodes = split_nodes_delimiter([node], "`", text_type_code)
         # new_nodes will be:
         # [
-        #     TextNode("This is text with a ", "text"),
-        #     TextNode("code block", "code"),
-        #     TextNode(" word", "text"),
+        #     TextNode("This is text with a ", text_type_text),
+        #     TextNode("code block", text_type_code),
+        #     TextNode(" word", text_type_text),
         # ]
     """
     ret: list[TextNode] = []
     for node in old_nodes:
-        if node.text_type != "text":
+        if node.text_type != text_type_text:
             # Append the TextNode as-is if its type is not text.
             ret.append(node)
         else:
@@ -72,12 +69,12 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
 
     Example:
         text = "This is text with a `code block` word"
-        nodes = splitter(text, "`", "code")
+        nodes = splitter(text, "`", text_type_code)
         # nodes will be:
         # [
-        #     TextNode("This is text with a ", "text"),
-        #     TextNode("code block", "code"),
-        #     TextNode(" word", "text"),
+        #     TextNode("This is text with a ", text_type_text),
+        #     TextNode("code block", text_type_code),
+        #     TextNode(" word", text_type_text),
         # ]
     """
     # All the TextNode segments are stored here for later return.
@@ -141,9 +138,9 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
                 delim_start_found = False
                 # And create and append the new TextNode containing the
                 # delimited segment, for instance if we had the target
-                # TextNode("This is text with a `code block` word", "text") and
+                # TextNode("This is text with a `code block` word", text_type_text) and
                 # we were delimiting the backtick, then this block of code would
-                # append TextNode("code block", "code") to the segments array.
+                # append TextNode("code block", text_type_code) to the segments array.
                 if delim_segment:
                     segments.append(TextNode(delim_segment, text_type))
                 # Once we've created TextNode for the delimited text, we reset
@@ -155,15 +152,15 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
                 # set delim_start_found to True.
                 delim_start_found = True
                 # If a normal text exists prior to a delimited text (e.g.
-                # TextNode("This is a text with a `code block` word", "text"),
+                # TextNode("This is a text with a `code block` word", text_type_text),
                 # where "This is a text with a " is the normal text), we need to
                 # create a separate normal text node for it.
                 if normal_segment:
                     # Ensure that `normal_segment` is not empty, emptied
                     # normal_segment can happen if there is a delimited text at
                     # the beginning of the target text for example:
-                    # TextNode("**bold** text is at the start", "text").
-                    segments.append(TextNode(normal_segment, "text"))
+                    # TextNode("**bold** text is at the start", text_type_text).
+                    segments.append(TextNode(normal_segment, text_type_text))
                     # Once we've created TextNode for the normal text, we reset
                     # the normal_segment string to get ready for any other
                     # normal text segments in the other parts of the target
@@ -176,7 +173,7 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
                 # Even if the current substring within the target text string is
                 # not a delimiter, it can be a delimited string like "This is a
                 # `**bold**` text", where we could current be at for instance
-                # character `l` in the word "bold" which is part of a delimited
+                # character `l` in the word text_type_bold which is part of a delimited
                 # text. Therefore, we concatenate the substring to
                 # `delim_segment`. But we only do this if we know that we've
                 # previously found the opening delimiter.
@@ -193,7 +190,7 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
         # means that the remaining text was a normal text, then create TextNode
         # and append it to `segments`.
         if index == len(text) - 1 and not delim_start_found and normal_segment:
-            segments.append(TextNode(normal_segment, "text"))
+            segments.append(TextNode(normal_segment, text_type_text))
         # This is where we increment the `index` value, but the size of the
         # increment will vary by two different situations.
         if text[index : index + len(delim)] == delim:
