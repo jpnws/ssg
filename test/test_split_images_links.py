@@ -13,7 +13,7 @@ class TestSplitImagesLinks(unittest.TestCase):
         """
         # Arrange
         node = TextNode(
-            "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
+            "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png) and another normal text!",
             "text",
         )
         # Act
@@ -31,6 +31,7 @@ class TestSplitImagesLinks(unittest.TestCase):
                 "image",
                 "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png",
             ),
+            TextNode(" and another normal text!", "text"),
         ]
         # Assert
         self.assertListEqual(actual, expected)
