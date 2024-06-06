@@ -48,6 +48,7 @@ def node_splitter(
         # If there are no markdown targets, let it through without splitting.
         if not target_tuples:
             new_nodes.append(old_node)
+            continue
         for target_tuple in target_tuples:
             delim = ""
             if text_type == "image":

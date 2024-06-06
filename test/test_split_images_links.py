@@ -36,7 +36,7 @@ class TestSplitImagesLinks(unittest.TestCase):
         # Assert
         self.assertListEqual(actual, expected)
 
-    def test_split_nodes_image_combo(self):
+    def test_split_nodes_image_combo1(self):
         """
         Test that TextNodes are split by images in markdown text with varying
         form of strings.
@@ -64,6 +64,29 @@ class TestSplitImagesLinks(unittest.TestCase):
             TextNode("img", "image", "image-link"),
             TextNode("img", "image", "image-link"),
             TextNode("![img(image-link)", "text"),
+        ]
+        # Assert
+        self.assertListEqual(actual, expected)
+
+    def test_split_nodes_image_combo2(self):
+        # Arrange
+        node = TextNode(
+            "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)",
+            "text",
+        )
+        # Act
+        actual = split_nodes_image([node])
+        expected = [
+            TextNode(
+                "This is **text** with an *italic* word and a `code block` and an ",
+                "text",
+            ),
+            TextNode(
+                "image",
+                "image",
+                "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png",
+            ),
+            TextNode(" and a [link](https://boot.dev)", "text"),
         ]
         # Assert
         self.assertListEqual(actual, expected)
