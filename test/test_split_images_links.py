@@ -55,3 +55,67 @@ class TestSplitImagesLinks(unittest.TestCase):
         ]
         # Assert
         self.assertListEqual(actual, expected)
+
+    def test_split_nodes_image_combo(self):
+        """
+        Test that TextNodes are split by images in markdown text with varying
+        form of strings.
+        """
+        # Arrange
+        node1 = TextNode(
+            ".![img](image-link) a ![img](image-link)b![img](image-link)![img](image-link).",
+            "text",
+        )
+        node2 = TextNode(
+            "![img](image-link)![img](image-link)![img(image-link)",
+            "text",
+        )
+        # Act
+        actual = split_nodes_image([node1, node2])
+        expected = [
+            TextNode(".", "text"),
+            TextNode("img", "image", "image-link"),
+            TextNode(" a ", "text"),
+            TextNode("img", "image", "image-link"),
+            TextNode("b", "text"),
+            TextNode("img", "image", "image-link"),
+            TextNode("img", "image", "image-link"),
+            TextNode(".", "text"),
+            TextNode("img", "image", "image-link"),
+            TextNode("img", "image", "image-link"),
+            TextNode("![img(image-link)", "text"),
+        ]
+        # Assert
+        self.assertListEqual(actual, expected)
+
+    def test_split_nodes_link_combo(self):
+        """
+        Test that TextNodes are split by links in markdown text with varying
+        form of strings.
+        """
+        # Arrange
+        node1 = TextNode(
+            ".[link](link-link) a [link](link-link)b[link](link-link)[link](link-link).",
+            "text",
+        )
+        node2 = TextNode(
+            "[link](link-link)[link](link-link)[link(link-link)",
+            "text",
+        )
+        # Act
+        actual = split_nodes_link([node1, node2])
+        expected = [
+            TextNode(".", "text"),
+            TextNode("link", "link", "link-link"),
+            TextNode(" a ", "text"),
+            TextNode("link", "link", "link-link"),
+            TextNode("b", "text"),
+            TextNode("link", "link", "link-link"),
+            TextNode("link", "link", "link-link"),
+            TextNode(".", "text"),
+            TextNode("link", "link", "link-link"),
+            TextNode("link", "link", "link-link"),
+            TextNode("[link(link-link)", "text"),
+        ]
+        # Assert
+        self.assertListEqual(actual, expected)
