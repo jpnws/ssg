@@ -36,26 +36,6 @@ class TestSplitImagesLinks(unittest.TestCase):
         # Assert
         self.assertListEqual(actual, expected)
 
-    def test_split_nodes_link(self):
-        """
-        Test that TextNodes are split by links in markdown text.
-        """
-        # Arrange
-        node = TextNode(
-            "This is text with a [link](https://www.example.com) and [another](https://www.example.com/another)",
-            "text",
-        )
-        # Act
-        actual = split_nodes_link([node])
-        expected = [
-            TextNode("This is text with a ", "text"),
-            TextNode("link", "link", "https://www.example.com"),
-            TextNode(" and ", "text"),
-            TextNode("another", "link", "https://www.example.com/another"),
-        ]
-        # Assert
-        self.assertListEqual(actual, expected)
-
     def test_split_nodes_image_combo(self):
         """
         Test that TextNodes are split by images in markdown text with varying
@@ -84,6 +64,26 @@ class TestSplitImagesLinks(unittest.TestCase):
             TextNode("img", "image", "image-link"),
             TextNode("img", "image", "image-link"),
             TextNode("![img(image-link)", "text"),
+        ]
+        # Assert
+        self.assertListEqual(actual, expected)
+
+    def test_split_nodes_link(self):
+        """
+        Test that TextNodes are split by links in markdown text.
+        """
+        # Arrange
+        node = TextNode(
+            "This is text with a [link](https://www.example.com) and [another](https://www.example.com/another)",
+            "text",
+        )
+        # Act
+        actual = split_nodes_link([node])
+        expected = [
+            TextNode("This is text with a ", "text"),
+            TextNode("link", "link", "https://www.example.com"),
+            TextNode(" and ", "text"),
+            TextNode("another", "link", "https://www.example.com/another"),
         ]
         # Assert
         self.assertListEqual(actual, expected)
