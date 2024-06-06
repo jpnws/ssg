@@ -37,6 +37,21 @@ def node_splitter(
     extractor: Callable[[str], list[tuple[str, str]]],
     text_type: str,
 ) -> list[TextNode]:
+    """
+    Intermediary function for processing `TextNode`s to split them by markdown
+    image/link syntax in a target text string.
+
+    Args:
+        - old_nodes list[TextNode]: Target nodes to be splitted.
+        - extractor Callable[[str], list[tuple[str, str]]]: Extractor function
+          that takes a string argument and returns a list of tuples with two
+          items per tuple.
+        - text_type str: The type of text to target (e.g. image/link)
+
+    Returns:
+        - list[TextNode]: A list of text nodes containing normal and markdown
+          image/link segments.
+    """
     # A list to store all the final `TextNode`s.
     new_nodes: list[TextNode] = []
     for old_node in old_nodes:
