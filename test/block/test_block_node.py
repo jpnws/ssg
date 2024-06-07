@@ -1,6 +1,6 @@
 import unittest
 
-from blocks.block_node import BlockNode
+from block.block_node import BlockNode
 
 
 class TestBlockNode(unittest.TestCase):

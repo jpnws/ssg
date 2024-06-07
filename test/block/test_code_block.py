@@ -1,6 +1,6 @@
 import unittest
 
-from blocks.code_block import CodeBlock
+from block.code_block import CodeBlock
 
 
 class TestCodeBlock(unittest.TestCase):

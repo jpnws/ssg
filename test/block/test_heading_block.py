@@ -1,6 +1,6 @@
 import unittest
 
-from blocks.heading_block import HeadingBlock
+from block.heading_block import HeadingBlock
 
 
 class TestHeadingBlock(unittest.TestCase):
