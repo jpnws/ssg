@@ -1,9 +1,9 @@
 from typing import Callable
 
-from textnode import TextNode
+from inline.text_node import TextNode
 
-from extract_links import extract_markdown_images
-from extract_links import extract_markdown_links
+from inline.extract_links import extract_markdown_images
+from inline.extract_links import extract_markdown_links
 
 from util import (
     text_type_text,

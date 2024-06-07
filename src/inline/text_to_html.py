@@ -1,6 +1,6 @@
-from textnode import TextNode
-from htmlnode import HTMLNode
-from leafnode import LeafNode
+from inline.text_node import TextNode
+from html_node import HTMLNode
+from leaf_node import LeafNode
 
 from util import (
     text_type_text,

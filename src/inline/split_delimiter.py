@@ -1,4 +1,4 @@
-from textnode import TextNode
+from inline.text_node import TextNode
 
 
 from util import (

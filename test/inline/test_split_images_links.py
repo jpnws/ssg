@@ -1,9 +1,9 @@
 import unittest
 
-from textnode import TextNode
+from inline.text_node import TextNode
 
-from split_images_links import split_nodes_image
-from split_images_links import split_nodes_link
+from inline.split_images_links import split_nodes_image
+from inline.split_images_links import split_nodes_link
 
 
 class TestSplitImagesLinks(unittest.TestCase):
