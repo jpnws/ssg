@@ -1,6 +1,6 @@
 from inline.text_node import TextNode
 
-from split_delimiter import split_nodes_delimiter
+from inline.split_delimiters import split_nodes_delimiter
 from split_images_links import split_nodes_image
 from split_images_links import split_nodes_link
 
@@ -12,7 +12,7 @@ from util import (
 )
 
 
-def text_to_textnodes(text: str) -> list[TextNode]:
+def text_to_text_nodes(text: str) -> list[TextNode]:
     res = [TextNode(text, text_type_text)]
     res = split_nodes_image(res)
     res = split_nodes_link(res)

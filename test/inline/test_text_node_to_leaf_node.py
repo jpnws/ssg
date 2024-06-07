@@ -2,7 +2,7 @@ import unittest
 
 from inline.text_node import TextNode
 
-from inline.text_textnodes import text_to_textnodes
+from inline.text_to_text_nodes import text_to_text_nodes
 
 text_type_text = "text"
 text_type_bold = "bold"
@@ -17,7 +17,7 @@ class TestTextTextNodes(unittest.TestCase):
         # Arrange
         text = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
         # Act
-        actual = text_to_textnodes(text)
+        actual = text_to_text_nodes(text)
         expected = [
             TextNode("This is ", text_type_text),
             TextNode("text", text_type_bold),

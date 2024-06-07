@@ -12,7 +12,7 @@ from util import (
 )
 
 
-def text_node_to_html_node(text_node: TextNode) -> HTMLNode:
+def text_node_to_leaf_node(text_node: TextNode) -> HTMLNode:
     """
     Convert TextNode to HTMLNode/LeafNode.
     """

@@ -3,7 +3,7 @@ import unittest
 from inline.text_node import TextNode
 from html_node import HTMLNode
 
-from inline.text_to_html import text_node_to_html_node
+from inline.text_node_to_leaf_node import text_node_to_leaf_node
 
 
 class TestTextToHTML(unittest.TestCase):
@@ -20,12 +20,12 @@ class TestTextToHTML(unittest.TestCase):
         node6 = TextNode("alt text", "image", "https://www.google.com")
         node7 = TextNode("invalid type", "invalid")
         # Act
-        res1 = text_node_to_html_node(node1)
-        res2 = text_node_to_html_node(node2)
-        res3 = text_node_to_html_node(node3)
-        res4 = text_node_to_html_node(node4)
-        res5 = text_node_to_html_node(node5)
-        res6 = text_node_to_html_node(node6)
+        res1 = text_node_to_leaf_node(node1)
+        res2 = text_node_to_leaf_node(node2)
+        res3 = text_node_to_leaf_node(node3)
+        res4 = text_node_to_leaf_node(node4)
+        res5 = text_node_to_leaf_node(node5)
+        res6 = text_node_to_leaf_node(node6)
         # Assert
         self.assertIsInstance(res1, HTMLNode)
         self.assertIsInstance(res2, HTMLNode)
@@ -51,4 +51,4 @@ class TestTextToHTML(unittest.TestCase):
             {"src": "https://www.google.com", "alt": "alt text"},
         )
         with self.assertRaises(ValueError):
-            text_node_to_html_node(node7)
+            text_node_to_leaf_node(node7)
