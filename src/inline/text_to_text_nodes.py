@@ -1,14 +1,11 @@
-from inline.text_node import TextNode
-
 from inline.split_delimiters import split_nodes_delimiter
-from split_images_links import split_nodes_image
-from split_images_links import split_nodes_link
-
+from inline.text_node import TextNode
+from split_images_links import split_nodes_image, split_nodes_link
 from util import (
-    text_type_text,
     text_type_bold,
-    text_type_italic,
     text_type_code,
+    text_type_italic,
+    text_type_text,
 )
 
 

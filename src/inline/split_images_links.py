@@ -1,14 +1,11 @@
 from typing import Callable
 
+from inline.extract_images_links import extract_markdown_images, extract_markdown_links
 from inline.text_node import TextNode
-
-from inline.extract_images_links import extract_markdown_images
-from inline.extract_images_links import extract_markdown_links
-
 from util import (
-    text_type_text,
-    text_type_link,
     text_type_image,
+    text_type_link,
+    text_type_text,
 )
 
 

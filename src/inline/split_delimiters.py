@@ -1,6 +1,4 @@
 from inline.text_node import TextNode
-
-
 from util import (
     text_type_text,
 )
