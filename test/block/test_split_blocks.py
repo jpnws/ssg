@@ -1,62 +1,49 @@
 import unittest
 
 from block.block_node import BlockNode
-from block.heading_block import HeadingBlock
 from block.code_block import CodeBlock
-
-from block.split_blocks import split_blocks_heading
-from block.split_blocks import split_blocks_code
-from block.split_blocks import split_blocks_quote
+from block.heading_block import HeadingBlock
+from block.split_blocks import (
+    split_blocks_code,
+    split_blocks_heading,
+    split_blocks_quote,
+)
 
 
 class TestSplitBlocks(unittest.TestCase):
     def test_split_blocks_heading(self):
         # Arrange
         node = BlockNode(
-            """
-        ABC
-
-        # Heading 1
-
-        ABC
-
-        ## Heading 2
-
-        ABC
-
-        ### Heading 3
-
-        ABC
-
-        #### Heading 4
-
-        ABC
-
-        ##### Heading 5
-
-        ABC
-
-        ###### Heading 6
-
-        ABC
-        """,
+            "ABC\n\n# Heading 1\n\nABC\n\n## Heading 2\n\nABC\n\n### Heading 3\n\nABC\n\n#### Heading 4\n\nABC\n\n##### Heading 5\n\nABC\n\n###### Heading 6\n\nABC",
             "paragraph",
         )
         # Act
         actual = split_blocks_heading([node])
         expected: list[BlockNode] = [
             BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
             HeadingBlock("Heading 1", "heading", 1),
+            BlockNode("", "newline"),
             BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
             HeadingBlock("Heading 2", "heading", 2),
+            BlockNode("", "newline"),
             BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
             HeadingBlock("Heading 3", "heading", 3),
+            BlockNode("", "newline"),
             BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
             HeadingBlock("Heading 4", "heading", 4),
+            BlockNode("", "newline"),
             BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
             HeadingBlock("Heading 5", "heading", 5),
+            BlockNode("", "newline"),
             BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
             HeadingBlock("Heading 6", "heading", 6),
+            BlockNode("", "newline"),
             BlockNode("ABC", "paragraph"),
         ]
         # Assert
@@ -65,21 +52,14 @@ class TestSplitBlocks(unittest.TestCase):
     def test_split_blocks_code(self):
         # Arrange
         node = BlockNode(
-            """
-        ABC
-```python
-# comment
-def func():
-    pass
-```
-        ABC
-        """,
+            "ABC\n\n```python\n# comment\ndef func():\n    pass\n```\nABC",
             "paragraph",
         )
         # Act
         actual = split_blocks_code([node])
         expected = [
             BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
             CodeBlock("# comment\ndef func():\n    pass\n", "code", "python"),
             BlockNode("ABC", "paragraph"),
         ]
@@ -89,25 +69,12 @@ def func():
     def test_split_blocks_quote(self):
         # Arrange
         node = BlockNode(
-            """
-ABC
-
-> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-> Morbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.
-> In sagittis consectetur tristique. Sed porttitor mi magna.
-
-> Vivamus nec auctor quam. In mauris mauris, sagittis quis dignissim.
-> Etiam tempus tellus nec elementum sagittis. Phasellus ullamcorper risus elit, eget blandit diam cursus ut.
-> Suspendisse eu sem risus.
-
-ABC
-""",
+            "ABC\n\n> Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n> Morbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\n> In sagittis consectetur tristique. Sed porttitor mi magna.\n\n> Vivamus nec auctor quam. In mauris mauris, sagittis quis dignissim.\n> Etiam tempus tellus nec elementum sagittis. Phasellus ullamcorper risus elit, eget blandit diam cursus ut.\n> Suspendisse eu sem risus.\n\nABC",
             "paragraph",
         )
         # Act
         actual = split_blocks_quote([node])
         expected = [
-            BlockNode("", "newline"),
             BlockNode("ABC", "paragraph"),
             BlockNode("", "newline"),
             BlockNode(

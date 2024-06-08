@@ -1,23 +1,23 @@
-from util import block_type_newline, block_type_quote, block_type_paragraph
-
 from block.block_node import BlockNode
-from block.heading_block import HeadingBlock
 from block.code_block import CodeBlock
+from block.heading_block import HeadingBlock
+from util import block_type_newline, block_type_paragraph, block_type_quote
 
 
 def split_blocks_heading(blocks: list[BlockNode]) -> list[BlockNode]:
     nodes: list[BlockNode] = []
     for block in blocks:
-        if isinstance(block, CodeBlock):
+        # Skip if we are not at a block with paragraph type. Let the block
+        # through to the nodes list.
+        if block.block_type != block_type_paragraph:
             nodes.append(block)
             continue
         for line in block.block_text.splitlines():
             line = line.strip()
             if not line:
-                continue
+                nodes.append(BlockNode("", block_type_newline))
             elif "#" not in line:
                 nodes.append(BlockNode(line, "paragraph"))
-                continue
             elif line.startswith("######"):
                 block_text = line.split("######")[-1].strip()
                 nodes.append(HeadingBlock(block_text, "heading", 6))
@@ -41,13 +41,31 @@ def split_blocks_heading(blocks: list[BlockNode]) -> list[BlockNode]:
 
 def split_blocks_code(blocks: list[BlockNode]) -> list[BlockNode]:
     nodes: list[BlockNode] = []
-    opening_found = False
     for block in blocks:
+        # Skip if we are not at a block with paragraph type. Let the block
+        # through to the nodes list.
+        if block.block_type != block_type_paragraph:
+            nodes.append(block)
+            continue
         language = ""
         code_segment = ""
         paragraph_segment = ""
+        opening_found = False
         for line in block.block_text.splitlines():
             if not line:
+                # If the current line is an empty string, then that means that
+                # we have a newline markdown block separator here. This could
+                # have come after a paragraph or quote segment, if so, then
+                # create the block nodes for them, and then continue to create
+                # the newline separator block node.
+                if paragraph_segment:
+                    nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+                    paragraph_segment = ""
+                if code_segment:
+                    nodes.append(BlockNode(code_segment, block_type_quote))
+                    code_segment = ""
+                    opening_found = False
+                nodes.append(BlockNode("", block_type_newline))
                 continue
             if "```" not in line and not opening_found:
                 paragraph_segment += line
@@ -74,14 +92,14 @@ def split_blocks_code(blocks: list[BlockNode]) -> list[BlockNode]:
 def split_blocks_quote(blocks: list[BlockNode]) -> list[BlockNode]:
     nodes: list[BlockNode] = []
     for block in blocks:
-        paragraph_segment = ""
-        quote_segment = ""
-        quote_started = False
         # Skip if we are not at a block with paragraph type. Let the block
         # through to the nodes list.
         if block.block_type != block_type_paragraph:
             nodes.append(block)
             continue
+        paragraph_segment = ""
+        quote_segment = ""
+        quote_started = False
         split_block_text = block.block_text.splitlines()
         for line in split_block_text:
             line = line.strip()
