@@ -17,35 +17,42 @@ from util import (
 def split_blocks_heading(blocks: list[BlockNode]) -> list[BlockNode]:
     nodes: list[BlockNode] = []
     for block in blocks:
-        # Skip if we are not at a block with paragraph type. Let the block
-        # through to the nodes list.
         if block.block_type != block_type_paragraph:
             nodes.append(block)
             continue
+        paragraph_segment = ""
         for line in block.block_text.splitlines():
             line = line.strip()
             if not line:
                 nodes.append(BlockNode("", block_type_newline))
-            elif "#" not in line:
-                nodes.append(BlockNode(line, "paragraph"))
-            elif line.startswith("###### "):
-                block_text = line.split("###### ")[-1].strip()
-                nodes.append(HeadingBlock(block_text, block_type_heading, 6))
-            elif line.startswith("##### "):
-                block_text = line.split("##### ")[-1].strip()
-                nodes.append(HeadingBlock(block_text, block_type_heading, 5))
-            elif line.startswith("#### "):
-                block_text = line.split("#### ")[-1].strip()
-                nodes.append(HeadingBlock(block_text, block_type_heading, 4))
-            elif line.startswith("### "):
-                block_text = line.split("### ")[-1].strip()
-                nodes.append(HeadingBlock(block_text, block_type_heading, 3))
-            elif line.startswith("## "):
-                block_text = line.split("## ")[-1].strip()
-                nodes.append(HeadingBlock(block_text, block_type_heading, 2))
-            elif line.startswith("# "):
-                block_text = line.split("# ")[-1].strip()
-                nodes.append(HeadingBlock(block_text, block_type_heading, 1))
+                continue
+            if "#" not in line:
+                paragraph_segment += f"{line}\n"
+            if re.match(r"^\#{1,6}\s", line):
+                if line.startswith("###### "):
+                    block_text = line.split("###### ")[-1].strip()
+                    nodes.append(HeadingBlock(f"{block_text}\n", block_type_heading, 6))
+                elif line.startswith("##### "):
+                    block_text = line.split("##### ")[-1].strip()
+                    nodes.append(HeadingBlock(f"{block_text}\n", block_type_heading, 5))
+                elif line.startswith("#### "):
+                    block_text = line.split("#### ")[-1].strip()
+                    nodes.append(HeadingBlock(f"{block_text}\n", block_type_heading, 4))
+                elif line.startswith("### "):
+                    block_text = line.split("### ")[-1].strip()
+                    nodes.append(HeadingBlock(f"{block_text}\n", block_type_heading, 3))
+                elif line.startswith("## "):
+                    block_text = line.split("## ")[-1].strip()
+                    nodes.append(HeadingBlock(f"{block_text}\n", block_type_heading, 2))
+                elif line.startswith("# "):
+                    block_text = line.split("# ")[-1].strip()
+                    nodes.append(HeadingBlock(f"{block_text}\n", block_type_heading, 1))
+                if paragraph_segment:
+                    nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+                    paragraph_segment = ""
+        if paragraph_segment:
+            nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+            paragraph_segment = ""
     return nodes
 
 
@@ -84,8 +91,8 @@ def split_blocks_code(blocks: list[BlockNode]) -> list[BlockNode]:
                 language = line.split("```")[-1]
                 if paragraph_segment:
                     nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+                    paragraph_segment = ""
                 opening_found = True
-                paragraph_segment = ""
                 continue
             if "```" in line and opening_found:
                 opening_found = False
@@ -96,6 +103,7 @@ def split_blocks_code(blocks: list[BlockNode]) -> list[BlockNode]:
             block_segment += f"{line}\n"
         if paragraph_segment:
             nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+            paragraph_segment = ""
     return nodes
 
 
@@ -108,8 +116,8 @@ def split_blocks_quote(blocks: list[BlockNode]) -> list[BlockNode]:
         paragraph_segment = ""
         block_segment = ""
         block_started = False
+        # print(repr(block))
         for line in block.block_text.splitlines():
-            print(repr(line))
             line = line.strip()
             if not line:
                 if paragraph_segment:
@@ -121,7 +129,7 @@ def split_blocks_quote(blocks: list[BlockNode]) -> list[BlockNode]:
                     block_started = False
                 nodes.append(BlockNode("", block_type_newline))
             if not line.startswith("> ") and not block_started:
-                paragraph_segment += line
+                paragraph_segment += f"{line}\n"
             if not line.startswith("> ") and block_started:
                 nodes.append(BlockNode(block_segment, block_type_quote))
                 block_segment = ""
@@ -135,6 +143,11 @@ def split_blocks_quote(blocks: list[BlockNode]) -> list[BlockNode]:
                 block_segment += f"{line.lstrip("> ")}\n"
         if paragraph_segment:
             nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+            paragraph_segment = ""
+        if block_segment:
+            nodes.append(BlockNode(block_segment, block_type_quote))
+            block_segment = ""
+            block_started = False
     return nodes
 
 
@@ -159,7 +172,7 @@ def split_blocks_unordered_list(blocks: list[BlockNode]) -> list[BlockNode]:
                     block_started = False
                 nodes.append(BlockNode("", block_type_newline))
             if not line.startswith("* ") and not block_started:
-                paragraph_segment += line
+                paragraph_segment += f"{line}\n"
             if not line.startswith("* ") and block_started:
                 nodes.append(BlockNode(block_segment, block_type_unordered_list))
                 block_segment = ""
@@ -173,6 +186,11 @@ def split_blocks_unordered_list(blocks: list[BlockNode]) -> list[BlockNode]:
                 block_segment += f"{line.lstrip("* ")}\n"
         if paragraph_segment:
             nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+            paragraph_segment = ""
+        if block_segment:
+            nodes.append(BlockNode(block_segment, block_type_unordered_list))
+            block_segment = ""
+            block_started = False
     return nodes
 
 
@@ -197,7 +215,7 @@ def split_blocks_ordered_list(blocks: list[BlockNode]) -> list[BlockNode]:
                     block_started = False
                 nodes.append(BlockNode("", block_type_newline))
             if not re.match(r"^\d+\.\s", line) and not block_started:
-                paragraph_segment += line
+                paragraph_segment += f"{line}\n"
             if not re.match(r"^\d+\.\s", line) and block_started:
                 nodes.append(BlockNode(block_segment, block_type_ordered_list))
                 block_segment = ""
@@ -211,4 +229,5 @@ def split_blocks_ordered_list(blocks: list[BlockNode]) -> list[BlockNode]:
                 block_segment += f"{re.sub(r"^\d+\.\s", "", line)}\n"
         if paragraph_segment:
             nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+            paragraph_segment = ""
     return nodes

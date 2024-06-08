@@ -68,11 +68,12 @@ class TestSplitBlocks(unittest.TestCase):
         )
         # Act
         actual = split_blocks_code([node])
+        pprint.pp(actual)
         expected = [
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
             CodeBlock("# comment\ndef func():\n    pass\n", "code", "python"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
         ]
         # Assert
         self.assertListEqual(actual, expected)
@@ -162,32 +163,48 @@ class TestSplitBlocks(unittest.TestCase):
         """
         # Arrange
         node = BlockNode(
-            "ABC\n\n# Heading 1\n\nABC\n\n```python\n# comment\ndef func():\n    pass\n```\n\nABC\n\n> Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n> Morbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\n> In sagittis consectetur tristique. Sed porttitor mi magna.",
+            "ABC\n\n# Heading 1\n\nABC\n\n```python\n# comment\ndef func():\n    pass\n```\n\nABC\n\n> Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n> Morbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\n> In sagittis consectetur tristique. Sed porttitor mi magna.\n\nABC\n\n* List item 1 (block1)\n* List item 2 (block1)\n\n* List item 1 (block2)\n* List item 2 (block2)\n\nABC\n\nABC\n\n1. List item 1 (block1)\n2. List item 2 (block1)\n\n1. List item 1 (block2)\n2. List item 2 (block2)\n\nABC",
             "paragraph",
         )
         # Act
         actual = split_blocks_code([node])
-        actual = split_blocks_heading(actual)
-        pprint.pp(actual)
         actual = split_blocks_quote(actual)
-        # actual = split_blocks_unordered_list(actual)
-        # actual = split_blocks_ordered_list(actual)
+        actual = split_blocks_heading(actual)
+        actual = split_blocks_unordered_list(actual)
+        actual = split_blocks_ordered_list(actual)
+        pprint.pp(actual)
 
         expected = [
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
-            HeadingBlock("Heading 1", "heading", 1),
+            HeadingBlock("Heading 1\n", "heading", 1),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
             CodeBlock("# comment\ndef func():\n    pass\n", "code", "python"),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
             BlockNode(
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nMorbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\nIn sagittis consectetur tristique. Sed porttitor mi magna.\n",
                 "quote",
             ),
+            BlockNode("", "newline"),
+            BlockNode("ABC\n", "paragraph"),
+            BlockNode("", "newline"),
+            BlockNode("List item 1 (block1)\nList item 2 (block1)\n", "unordered_list"),
+            BlockNode("", "newline"),
+            BlockNode("List item 1 (block2)\nList item 2 (block2)\n", "unordered_list"),
+            BlockNode("", "newline"),
+            BlockNode("ABC\n", "paragraph"),
+            BlockNode("", "newline"),
+            BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
+            BlockNode("List item 1 (block1)\nList item 2 (block1)\n", "ordered_list"),
+            BlockNode("", "newline"),
+            BlockNode("List item 1 (block2)\nList item 2 (block2)\n", "ordered_list"),
+            BlockNode("", "newline"),
+            BlockNode("ABC", "paragraph"),
         ]
         # Assert
         self.assertListEqual(actual, expected)
