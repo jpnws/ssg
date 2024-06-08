@@ -1,13 +1,11 @@
 from block.block_node import BlockNode
-from block.heading_block import HeadingBlock
-from block.code_block import CodeBlock
 
 
-def split_blocks_heading(blocks: list[HeadingBlock]) -> list[HeadingBlock]:
+def split_blocks_heading(blocks: list[BlockNode]) -> list[BlockNode]:
     raise NotImplementedError
 
 
-def split_blocks_code(blocks: list[CodeBlock]) -> list[CodeBlock]:
+def split_blocks_code(blocks: list[BlockNode]) -> list[BlockNode]:
     raise NotImplementedError
 
 
