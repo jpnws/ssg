@@ -7,13 +7,15 @@ from block.split_blocks import (
     split_blocks_code,
     split_blocks_heading,
     split_blocks_quote,
+    split_blocks_unordered_list,
 )
 
 
 class TestSplitBlocks(unittest.TestCase):
     def test_split_blocks_heading(self):
         """
-        Test that the split_blocks_heading function correctly serializes the heading blocks from a markdown string.
+        Test that the split_blocks_heading function correctly serializes the
+        heading blocks from a markdown string.
         """
         # Arrange
         node = BlockNode(
@@ -54,7 +56,8 @@ class TestSplitBlocks(unittest.TestCase):
 
     def test_split_blocks_code(self):
         """
-        Test that the split_blocks_code function correctly serializes the code blocks from a markdown string.
+        Test that the split_blocks_code function correctly serializes the code
+        blocks from a markdown string.
         """
         # Arrange
         node = BlockNode(
@@ -74,7 +77,8 @@ class TestSplitBlocks(unittest.TestCase):
 
     def test_split_blocks_quote(self):
         """
-        Test that the split_blocks_quote function correctly serializes the quote blocks from a markdown string.
+        Test that the split_blocks_quote function correctly serializes the quote
+        blocks from a markdown string.
         """
         # Arrange
         node = BlockNode(
@@ -95,6 +99,32 @@ class TestSplitBlocks(unittest.TestCase):
                 "Vivamus nec auctor quam. In mauris mauris, sagittis quis dignissim.\nEtiam tempus tellus nec elementum sagittis. Phasellus ullamcorper risus elit, eget blandit diam cursus ut.\nSuspendisse eu sem risus.\n",
                 "quote",
             ),
+            BlockNode("", "newline"),
+            BlockNode("ABC", "paragraph"),
+        ]
+        # Assert
+        self.assertListEqual(actual, expected)
+
+    def test_split_blocks_unordered_list(self):
+        """
+        Test that the split_blocks_unordered_list function correctly serializes
+        the unordered list blocks from a markdown string.
+        """
+        # Arrange
+        node = BlockNode(
+            "ABC\n\n* List item 1 (block1)\n* List item 2 (block1)\n\n* List item 1 (block2)\n* List item 2 (block2)\n\nABC",
+            "paragraph",
+        )
+        # Act
+        actual = split_blocks_unordered_list([node])
+        expected = [
+            BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
+            BlockNode("* List item 1 (block1)", "unordered_list"),
+            BlockNode("* List item 2 (block1)", "unordered_list"),
+            BlockNode("", "newline"),
+            BlockNode("* List item 1 (block2)", "unordered_list"),
+            BlockNode("* List item 2 (block2)", "unordered_list"),
             BlockNode("", "newline"),
             BlockNode("ABC", "paragraph"),
         ]

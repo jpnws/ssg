@@ -18,23 +18,23 @@ def split_blocks_heading(blocks: list[BlockNode]) -> list[BlockNode]:
                 nodes.append(BlockNode("", block_type_newline))
             elif "#" not in line:
                 nodes.append(BlockNode(line, "paragraph"))
-            elif line.startswith("######"):
-                block_text = line.split("######")[-1].strip()
+            elif line.startswith("###### "):
+                block_text = line.split("###### ")[-1].strip()
                 nodes.append(HeadingBlock(block_text, "heading", 6))
-            elif line.startswith("#####"):
-                block_text = line.split("#####")[-1].strip()
+            elif line.startswith("##### "):
+                block_text = line.split("##### ")[-1].strip()
                 nodes.append(HeadingBlock(block_text, "heading", 5))
-            elif line.startswith("####"):
-                block_text = line.split("####")[-1].strip()
+            elif line.startswith("#### "):
+                block_text = line.split("#### ")[-1].strip()
                 nodes.append(HeadingBlock(block_text, "heading", 4))
-            elif line.startswith("###"):
-                block_text = line.split("###")[-1].strip()
+            elif line.startswith("### "):
+                block_text = line.split("### ")[-1].strip()
                 nodes.append(HeadingBlock(block_text, "heading", 3))
-            elif line.startswith("##"):
-                block_text = line.split("##")[-1].strip()
+            elif line.startswith("## "):
+                block_text = line.split("## ")[-1].strip()
                 nodes.append(HeadingBlock(block_text, "heading", 2))
-            elif line.startswith("#"):
-                block_text = line.split("#")[-1].strip()
+            elif line.startswith("# "):
+                block_text = line.split("# ")[-1].strip()
                 nodes.append(HeadingBlock(block_text, "heading", 1))
     return nodes
 
@@ -52,6 +52,7 @@ def split_blocks_code(blocks: list[BlockNode]) -> list[BlockNode]:
         paragraph_segment = ""
         opening_found = False
         for line in block.block_text.splitlines():
+            line = line.strip()
             if not line:
                 # If the current line is an empty string, then that means that
                 # we have a newline markdown block separator here. This could
@@ -117,17 +118,17 @@ def split_blocks_quote(blocks: list[BlockNode]) -> list[BlockNode]:
                     quote_segment = ""
                     quote_started = False
                 nodes.append(BlockNode("", block_type_newline))
-            if not line.startswith(">") and not quote_started:
+            if not line.startswith("> ") and not quote_started:
                 # Handle a non-quote line where there was no quote block that
                 # was parsed previously.
                 paragraph_segment += line
-            if not line.startswith(">") and quote_started:
+            if not line.startswith("> ") and quote_started:
                 # Handle a non-quote line where there was a quote block being
                 # parsed previously.
                 nodes.append(BlockNode(quote_segment, block_type_quote))
                 quote_segment = ""
                 quote_started = False
-            if line.startswith(">"):
+            if line.startswith("> "):
                 if not quote_started:
                     # Suppose that the quote was not started yet. First, there
                     # could've been a paragraph segement previously, so check
