@@ -158,11 +158,7 @@ class TestSplitBlocks(unittest.TestCase):
     def test_split_blocks_combo(self):
         """
         Test that the split bocks functions all work together to correctly parse
-        heading, code, quote, unordered list, and ordered list blocks. The test
-        string should have all levels of headings, multiple code blocks,
-        multiple quote blocks, multiple unordered list blocks, and multiple
-        ordered list blocks. All the blocks must be mixed in different places in
-        the markdown string. Also, the test string should have some empty lines.
+        heading, code, quote, unordered list, and ordered list blocks.
         """
         # Arrange
         node = BlockNode(
