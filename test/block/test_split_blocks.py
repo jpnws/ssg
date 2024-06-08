@@ -1,8 +1,8 @@
 import unittest
 
 from block.block_node import BlockNode
-from block.heading_node import HeadingNode
-from block.code_node import CodeNode
+from block.heading_block import HeadingBlock
+from block.code_block import CodeBlock
 
 from block.split_blocks import split_blocks_heading
 from block.split_blocks import split_blocks_code
@@ -45,17 +45,17 @@ class TestSplitBlocks(unittest.TestCase):
         actual = split_blocks_heading([node])
         expected: list[BlockNode] = [
             BlockNode("ABC", "paragraph"),
-            HeadingNode("Heading 1", "heading", 1),
+            HeadingBlock("Heading 1", "heading", 1),
             BlockNode("ABC", "paragraph"),
-            HeadingNode("Heading 2", "heading", 2),
+            HeadingBlock("Heading 2", "heading", 2),
             BlockNode("ABC", "paragraph"),
-            HeadingNode("Heading 3", "heading", 3),
+            HeadingBlock("Heading 3", "heading", 3),
             BlockNode("ABC", "paragraph"),
-            HeadingNode("Heading 4", "heading", 4),
+            HeadingBlock("Heading 4", "heading", 4),
             BlockNode("ABC", "paragraph"),
-            HeadingNode("Heading 5", "heading", 5),
+            HeadingBlock("Heading 5", "heading", 5),
             BlockNode("ABC", "paragraph"),
-            HeadingNode("Heading 6", "heading", 6),
+            HeadingBlock("Heading 6", "heading", 6),
             BlockNode("ABC", "paragraph"),
         ]
         # Assert
@@ -79,7 +79,7 @@ def func():
         actual = split_blocks_code([node])
         expected = [
             BlockNode("ABC", "paragraph"),
-            CodeNode("# comment\ndef func():\n    pass\n", "code", "python"),
+            CodeBlock("# comment\ndef func():\n    pass\n", "code", "python"),
             BlockNode("ABC", "paragraph"),
         ]
         # Assert

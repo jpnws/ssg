@@ -1,12 +1,12 @@
 from block.block_node import BlockNode
-from block.heading_node import HeadingNode
-from block.code_node import CodeNode
+from block.heading_block import HeadingBlock
+from block.code_block import CodeBlock
 
 
 def split_blocks_heading(blocks: list[BlockNode]) -> list[BlockNode]:
     nodes: list[BlockNode] = []
     for block in blocks:
-        if isinstance(block, CodeNode):
+        if isinstance(block, CodeBlock):
             nodes.append(block)
             continue
         for line in block.block_text.splitlines():
@@ -18,22 +18,22 @@ def split_blocks_heading(blocks: list[BlockNode]) -> list[BlockNode]:
                 continue
             elif line.startswith("######"):
                 block_text = line.split("######")[-1].strip()
-                nodes.append(HeadingNode(block_text, "heading", 6))
+                nodes.append(HeadingBlock(block_text, "heading", 6))
             elif line.startswith("#####"):
                 block_text = line.split("#####")[-1].strip()
-                nodes.append(HeadingNode(block_text, "heading", 5))
+                nodes.append(HeadingBlock(block_text, "heading", 5))
             elif line.startswith("####"):
                 block_text = line.split("####")[-1].strip()
-                nodes.append(HeadingNode(block_text, "heading", 4))
+                nodes.append(HeadingBlock(block_text, "heading", 4))
             elif line.startswith("###"):
                 block_text = line.split("###")[-1].strip()
-                nodes.append(HeadingNode(block_text, "heading", 3))
+                nodes.append(HeadingBlock(block_text, "heading", 3))
             elif line.startswith("##"):
                 block_text = line.split("##")[-1].strip()
-                nodes.append(HeadingNode(block_text, "heading", 2))
+                nodes.append(HeadingBlock(block_text, "heading", 2))
             elif line.startswith("#"):
                 block_text = line.split("#")[-1].strip()
-                nodes.append(HeadingNode(block_text, "heading", 1))
+                nodes.append(HeadingBlock(block_text, "heading", 1))
     return nodes
 
 
@@ -59,7 +59,7 @@ def split_blocks_code(blocks: list[BlockNode]) -> list[BlockNode]:
                 continue
             if "```" in line and opening_found:
                 opening_found = False
-                nodes.append(CodeNode(code_segment, "code", language))
+                nodes.append(CodeBlock(code_segment, "code", language))
                 code_segment = ""
                 language = ""
                 continue

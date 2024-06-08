@@ -1,7 +1,7 @@
 from block.block_node import BlockNode
 
 
-class HeadingNode(BlockNode):
+class HeadingBlock(BlockNode):
     def __init__(self, block_text: str, block_type: str, block_level: int) -> None:
         super().__init__(block_text, block_type)
         self.block_level = block_level
@@ -17,7 +17,7 @@ class HeadingNode(BlockNode):
             bool: True if two HeadingBlock object attributes are equal. False
             otherwise.
         """
-        if not isinstance(other, HeadingNode):
+        if not isinstance(other, HeadingBlock):
             return False
         return (
             self.block_text == other.block_text
