@@ -83,35 +83,53 @@ def split_blocks_quote(blocks: list[BlockNode]) -> list[BlockNode]:
             nodes.append(block)
             continue
         split_block_text = block.block_text.splitlines()
-        print(split_block_text)
         for line in split_block_text:
             line = line.strip()
-            # Create a newline block separator for empty lines.
             if not line:
+                # If the current line is an empty string, then that means that
+                # we have a newline markdown block separator here. This could
+                # have come after a paragraph or quote segment, if so, then
+                # create the block nodes for them, and then continue to create
+                # the newline separator block node.
+                if paragraph_segment:
+                    nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+                    paragraph_segment = ""
+                if quote_segment:
+                    nodes.append(BlockNode(quote_segment, block_type_quote))
+                    quote_segment = ""
+                    quote_started = False
                 nodes.append(BlockNode("", block_type_newline))
-                continue
-            # Handle a non-quote line where there was no quote block that was
-            # parsed previously.
             if not line.startswith(">") and not quote_started:
-                paragraph_segment += f"{line}\n"
-                continue
-            # Handle a non-quote line where there was a quote block being parsed
-            # previously.
+                # Handle a non-quote line where there was no quote block that
+                # was parsed previously.
+                paragraph_segment += line
             if not line.startswith(">") and quote_started:
-                nodes.append(BlockNode(f"{quote_segment}\n", block_type_quote))
+                # Handle a non-quote line where there was a quote block being
+                # parsed previously.
+                nodes.append(BlockNode(quote_segment, block_type_quote))
                 quote_segment = ""
                 quote_started = False
-                continue
-            # Handle a quote line here as long as it is not started.
             if line.startswith(">"):
-                quote_segment += f"{line}\n"
                 if not quote_started:
+                    # Suppose that the quote was not started yet. First, there
+                    # could've been a paragraph segement previously, so check
+                    # for that and handle it accordingly.
                     if paragraph_segment:
                         nodes.append(
-                            BlockNode(f"{paragraph_segment}\n", block_type_paragraph)
+                            BlockNode(f"{paragraph_segment}", block_type_paragraph)
                         )
+                        paragraph_segment = ""
+                    # Flag that the quote block has now started since it was not
+                    # started previously.
                     quote_started = True
-                continue
+                # Suppose that the current line has a quote symbol, then
+                # concatenate the line to the quote segment variable.
+                quote_segment += f"{line.lstrip("> ")}\n"
+        # Lastly, the text processing ends at the very last quote segment, but
+        # there could've been paragraph segments following it; therefore, check
+        # for it handle it accordingly.
+        if paragraph_segment:
+            nodes.append(BlockNode(f"{paragraph_segment}", block_type_paragraph))
     return nodes
 
 

@@ -106,25 +106,20 @@ ABC
         )
         # Act
         actual = split_blocks_quote([node])
-        print(actual)
         expected = [
+            BlockNode("", "newline"),
             BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
             BlockNode(
-                """
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Morbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.
-In sagittis consectetur tristique. Sed porttitor mi magna.
-""",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nMorbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\nIn sagittis consectetur tristique. Sed porttitor mi magna.\n",
                 "quote",
             ),
+            BlockNode("", "newline"),
             BlockNode(
-                """
-Vivamus nec auctor quam. In mauris mauris, sagittis quis dignissim.
-Etiam tempus tellus nec elementum sagittis. Phasellus ullamcorper risus elit, eget blandit diam cursus ut.
-Suspendisse eu sem risus.
-""",
+                "Vivamus nec auctor quam. In mauris mauris, sagittis quis dignissim.\nEtiam tempus tellus nec elementum sagittis. Phasellus ullamcorper risus elit, eget blandit diam cursus ut.\nSuspendisse eu sem risus.\n",
                 "quote",
             ),
+            BlockNode("", "newline"),
             BlockNode("ABC", "paragraph"),
         ]
         # Assert
