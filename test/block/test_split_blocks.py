@@ -1,4 +1,3 @@
-import pprint
 import unittest
 
 from block.block_node import BlockNode
@@ -143,7 +142,6 @@ class TestSplitBlocks(unittest.TestCase):
         )
         # Act
         actual = split_blocks_ordered_list([node])
-        pprint.pp(actual)
         expected = [
             BlockNode("ABC", "paragraph"),
             BlockNode("", "newline"),
