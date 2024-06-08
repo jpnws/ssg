@@ -1,3 +1,4 @@
+import pprint
 import unittest
 
 from block.block_node import BlockNode
@@ -6,6 +7,7 @@ from block.heading_block import HeadingBlock
 from block.split_blocks import (
     split_blocks_code,
     split_blocks_heading,
+    split_blocks_ordered_list,
     split_blocks_quote,
     split_blocks_unordered_list,
 )
@@ -120,11 +122,34 @@ class TestSplitBlocks(unittest.TestCase):
         expected = [
             BlockNode("ABC", "paragraph"),
             BlockNode("", "newline"),
-            BlockNode("* List item 1 (block1)", "unordered_list"),
-            BlockNode("* List item 2 (block1)", "unordered_list"),
+            BlockNode("List item 1 (block1)\nList item 2 (block1)\n", "unordered_list"),
             BlockNode("", "newline"),
-            BlockNode("* List item 1 (block2)", "unordered_list"),
-            BlockNode("* List item 2 (block2)", "unordered_list"),
+            BlockNode("List item 1 (block2)\nList item 2 (block2)\n", "unordered_list"),
+            BlockNode("", "newline"),
+            BlockNode("ABC", "paragraph"),
+        ]
+        # Assert
+        self.assertListEqual(actual, expected)
+
+    def test_split_blocks_ordered_list(self):
+        """
+        Test that the split_blocks_ordered_list function correctly serializes
+        the ordered list blocks from a markdown string.
+        """
+        # Arrange
+        node = BlockNode(
+            "ABC\n\n1. List item 1 (block1)\n2. List item 2 (block1)\n\n1. List item 1 (block2)\n2. List item 2 (block2)\n\nABC",
+            "paragraph",
+        )
+        # Act
+        actual = split_blocks_ordered_list([node])
+        pprint.pp(actual)
+        expected = [
+            BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
+            BlockNode("List item 1 (block1)\nList item 2 (block1)\n", "ordered_list"),
+            BlockNode("", "newline"),
+            BlockNode("List item 1 (block2)\nList item 2 (block2)\n", "ordered_list"),
             BlockNode("", "newline"),
             BlockNode("ABC", "paragraph"),
         ]

@@ -1,7 +1,15 @@
+import re
+
 from block.block_node import BlockNode
 from block.code_block import CodeBlock
 from block.heading_block import HeadingBlock
-from util import block_type_newline, block_type_paragraph, block_type_quote
+from util import (
+    block_type_newline,
+    block_type_ordered_list,
+    block_type_paragraph,
+    block_type_quote,
+    block_type_unordered_list,
+)
 
 
 def split_blocks_heading(blocks: list[BlockNode]) -> list[BlockNode]:
@@ -52,7 +60,6 @@ def split_blocks_code(blocks: list[BlockNode]) -> list[BlockNode]:
         paragraph_segment = ""
         opening_found = False
         for line in block.block_text.splitlines():
-            line = line.strip()
             if not line:
                 # If the current line is an empty string, then that means that
                 # we have a newline markdown block separator here. This could
@@ -148,13 +155,81 @@ def split_blocks_quote(blocks: list[BlockNode]) -> list[BlockNode]:
         # there could've been paragraph segments following it; therefore, check
         # for it handle it accordingly.
         if paragraph_segment:
-            nodes.append(BlockNode(f"{paragraph_segment}", block_type_paragraph))
+            nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
     return nodes
 
 
 def split_blocks_unordered_list(blocks: list[BlockNode]) -> list[BlockNode]:
-    raise NotImplementedError
+    nodes: list[BlockNode] = []
+    for block in blocks:
+        if block.block_type != block_type_paragraph:
+            nodes.append(block)
+            continue
+        paragraph_segment = ""
+        block_segment = ""
+        block_started = False
+        for line in block.block_text.splitlines():
+            line = line.strip()
+            if not line:
+                if paragraph_segment:
+                    nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+                    paragraph_segment = ""
+                if block_segment:
+                    nodes.append(BlockNode(block_segment, block_type_unordered_list))
+                    block_segment = ""
+                    block_started = False
+                nodes.append(BlockNode("", block_type_newline))
+            if not line.startswith("* ") and not block_started:
+                paragraph_segment += line
+            if not line.startswith("* ") and block_started:
+                nodes.append(BlockNode(block_segment, block_type_unordered_list))
+                block_segment = ""
+                block_started = False
+            if line.startswith("* "):
+                if not block_started:
+                    if paragraph_segment:
+                        nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+                        paragraph_segment = ""
+                    block_started = True
+                block_segment += f"{line.lstrip("* ")}\n"
+        if paragraph_segment:
+            nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+    return nodes
 
 
 def split_blocks_ordered_list(blocks: list[BlockNode]) -> list[BlockNode]:
-    raise NotImplementedError
+    nodes: list[BlockNode] = []
+    for block in blocks:
+        if block.block_type != block_type_paragraph:
+            nodes.append(block)
+            continue
+        paragraph_segment = ""
+        block_segment = ""
+        block_started = False
+        for line in block.block_text.splitlines():
+            line = line.strip()
+            if not line:
+                if paragraph_segment:
+                    nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+                    paragraph_segment = ""
+                if block_segment:
+                    nodes.append(BlockNode(block_segment, block_type_ordered_list))
+                    block_segment = ""
+                    block_started = False
+                nodes.append(BlockNode("", block_type_newline))
+            if not re.match(r"^\d+\.\s", line) and not block_started:
+                paragraph_segment += line
+            if not re.match(r"^\d+\.\s", line) and block_started:
+                nodes.append(BlockNode(block_segment, block_type_ordered_list))
+                block_segment = ""
+                block_started = False
+            if re.match(r"^\d+\.\s", line):
+                if not block_started:
+                    if paragraph_segment:
+                        nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+                        paragraph_segment = ""
+                    block_started = True
+                block_segment += f"{re.sub(r"^\d+\.\s", "", line)}\n"
+        if paragraph_segment:
+            nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
+    return nodes
