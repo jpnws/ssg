@@ -1,3 +1,5 @@
+from util import block_type_newline, block_type_quote, block_type_paragraph
+
 from block.block_node import BlockNode
 from block.heading_block import HeadingBlock
 from block.code_block import CodeBlock
@@ -70,7 +72,47 @@ def split_blocks_code(blocks: list[BlockNode]) -> list[BlockNode]:
 
 
 def split_blocks_quote(blocks: list[BlockNode]) -> list[BlockNode]:
-    raise NotImplementedError
+    nodes: list[BlockNode] = []
+    for block in blocks:
+        paragraph_segment = ""
+        quote_segment = ""
+        quote_started = False
+        # Skip if we are not at a block with paragraph type. Let the block
+        # through to the nodes list.
+        if block.block_type != block_type_paragraph:
+            nodes.append(block)
+            continue
+        split_block_text = block.block_text.splitlines()
+        print(split_block_text)
+        for line in split_block_text:
+            line = line.strip()
+            # Create a newline block separator for empty lines.
+            if not line:
+                nodes.append(BlockNode("", block_type_newline))
+                continue
+            # Handle a non-quote line where there was no quote block that was
+            # parsed previously.
+            if not line.startswith(">") and not quote_started:
+                paragraph_segment += f"{line}\n"
+                continue
+            # Handle a non-quote line where there was a quote block being parsed
+            # previously.
+            if not line.startswith(">") and quote_started:
+                nodes.append(BlockNode(f"{quote_segment}\n", block_type_quote))
+                quote_segment = ""
+                quote_started = False
+                continue
+            # Handle a quote line here as long as it is not started.
+            if line.startswith(">"):
+                quote_segment += f"{line}\n"
+                if not quote_started:
+                    if paragraph_segment:
+                        nodes.append(
+                            BlockNode(f"{paragraph_segment}\n", block_type_paragraph)
+                        )
+                    quote_started = True
+                continue
+    return nodes
 
 
 def split_blocks_unordered_list(blocks: list[BlockNode]) -> list[BlockNode]:

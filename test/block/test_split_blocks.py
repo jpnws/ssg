@@ -6,6 +6,7 @@ from block.code_block import CodeBlock
 
 from block.split_blocks import split_blocks_heading
 from block.split_blocks import split_blocks_code
+from block.split_blocks import split_blocks_quote
 
 
 class TestSplitBlocks(unittest.TestCase):
@@ -80,6 +81,50 @@ def func():
         expected = [
             BlockNode("ABC", "paragraph"),
             CodeBlock("# comment\ndef func():\n    pass\n", "code", "python"),
+            BlockNode("ABC", "paragraph"),
+        ]
+        # Assert
+        self.assertListEqual(actual, expected)
+
+    def test_split_blocks_quote(self):
+        # Arrange
+        node = BlockNode(
+            """
+ABC
+
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+> Morbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.
+> In sagittis consectetur tristique. Sed porttitor mi magna.
+
+> Vivamus nec auctor quam. In mauris mauris, sagittis quis dignissim.
+> Etiam tempus tellus nec elementum sagittis. Phasellus ullamcorper risus elit, eget blandit diam cursus ut.
+> Suspendisse eu sem risus.
+
+ABC
+""",
+            "paragraph",
+        )
+        # Act
+        actual = split_blocks_quote([node])
+        print(actual)
+        expected = [
+            BlockNode("ABC", "paragraph"),
+            BlockNode(
+                """
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Morbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.
+In sagittis consectetur tristique. Sed porttitor mi magna.
+""",
+                "quote",
+            ),
+            BlockNode(
+                """
+Vivamus nec auctor quam. In mauris mauris, sagittis quis dignissim.
+Etiam tempus tellus nec elementum sagittis. Phasellus ullamcorper risus elit, eget blandit diam cursus ut.
+Suspendisse eu sem risus.
+""",
+                "quote",
+            ),
             BlockNode("ABC", "paragraph"),
         ]
         # Assert
