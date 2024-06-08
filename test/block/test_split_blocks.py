@@ -1,3 +1,4 @@
+import pprint
 import unittest
 
 from block.block_node import BlockNode
@@ -150,6 +151,47 @@ class TestSplitBlocks(unittest.TestCase):
             BlockNode("List item 1 (block2)\nList item 2 (block2)\n", "ordered_list"),
             BlockNode("", "newline"),
             BlockNode("ABC", "paragraph"),
+        ]
+        # Assert
+        self.assertListEqual(actual, expected)
+
+    def test_split_blocks_combo(self):
+        """
+        Test that the split bocks functions all work together to correctly parse
+        heading, code, quote, unordered list, and ordered list blocks. The test
+        string should have all levels of headings, multiple code blocks,
+        multiple quote blocks, multiple unordered list blocks, and multiple
+        ordered list blocks. All the blocks must be mixed in different places in
+        the markdown string. Also, the test string should have some empty lines.
+        """
+        # Arrange
+        node = BlockNode(
+            "ABC\n\n# Heading 1\n\nABC\n\n```python\n# comment\ndef func():\n    pass\n```\n\nABC\n\n> Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n> Morbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\n> In sagittis consectetur tristique. Sed porttitor mi magna.",
+            "paragraph",
+        )
+        # Act
+        actual = split_blocks_code([node])
+        actual = split_blocks_heading(actual)
+        pprint.pp(actual)
+        actual = split_blocks_quote(actual)
+        # actual = split_blocks_unordered_list(actual)
+        # actual = split_blocks_ordered_list(actual)
+
+        expected = [
+            BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
+            HeadingBlock("Heading 1", "heading", 1),
+            BlockNode("", "newline"),
+            BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
+            CodeBlock("# comment\ndef func():\n    pass\n", "code", "python"),
+            BlockNode("", "newline"),
+            BlockNode("ABC", "paragraph"),
+            BlockNode("", "newline"),
+            BlockNode(
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nMorbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\nIn sagittis consectetur tristique. Sed porttitor mi magna.\n",
+                "quote",
+            ),
         ]
         # Assert
         self.assertListEqual(actual, expected)

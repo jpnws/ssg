@@ -4,6 +4,8 @@ from block.block_node import BlockNode
 from block.code_block import CodeBlock
 from block.heading_block import HeadingBlock
 from util import (
+    block_type_code,
+    block_type_heading,
     block_type_newline,
     block_type_ordered_list,
     block_type_paragraph,
@@ -28,22 +30,22 @@ def split_blocks_heading(blocks: list[BlockNode]) -> list[BlockNode]:
                 nodes.append(BlockNode(line, "paragraph"))
             elif line.startswith("###### "):
                 block_text = line.split("###### ")[-1].strip()
-                nodes.append(HeadingBlock(block_text, "heading", 6))
+                nodes.append(HeadingBlock(block_text, block_type_heading, 6))
             elif line.startswith("##### "):
                 block_text = line.split("##### ")[-1].strip()
-                nodes.append(HeadingBlock(block_text, "heading", 5))
+                nodes.append(HeadingBlock(block_text, block_type_heading, 5))
             elif line.startswith("#### "):
                 block_text = line.split("#### ")[-1].strip()
-                nodes.append(HeadingBlock(block_text, "heading", 4))
+                nodes.append(HeadingBlock(block_text, block_type_heading, 4))
             elif line.startswith("### "):
                 block_text = line.split("### ")[-1].strip()
-                nodes.append(HeadingBlock(block_text, "heading", 3))
+                nodes.append(HeadingBlock(block_text, block_type_heading, 3))
             elif line.startswith("## "):
                 block_text = line.split("## ")[-1].strip()
-                nodes.append(HeadingBlock(block_text, "heading", 2))
+                nodes.append(HeadingBlock(block_text, block_type_heading, 2))
             elif line.startswith("# "):
                 block_text = line.split("# ")[-1].strip()
-                nodes.append(HeadingBlock(block_text, "heading", 1))
+                nodes.append(HeadingBlock(block_text, block_type_heading, 1))
     return nodes
 
 
@@ -56,7 +58,7 @@ def split_blocks_code(blocks: list[BlockNode]) -> list[BlockNode]:
             nodes.append(block)
             continue
         language = ""
-        code_segment = ""
+        block_segment = ""
         paragraph_segment = ""
         opening_found = False
         for line in block.block_text.splitlines():
@@ -69,91 +71,68 @@ def split_blocks_code(blocks: list[BlockNode]) -> list[BlockNode]:
                 if paragraph_segment:
                     nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
                     paragraph_segment = ""
-                if code_segment:
-                    nodes.append(BlockNode(code_segment, block_type_quote))
-                    code_segment = ""
+                if block_segment:
+                    nodes.append(BlockNode(block_segment, block_type_quote))
+                    block_segment = ""
                     opening_found = False
                 nodes.append(BlockNode("", block_type_newline))
                 continue
             if "```" not in line and not opening_found:
-                paragraph_segment += line
+                paragraph_segment += f"{line}\n"
                 continue
             if "```" in line and not opening_found:
                 language = line.split("```")[-1]
                 if paragraph_segment:
-                    nodes.append(BlockNode(paragraph_segment.strip(), "paragraph"))
+                    nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
                 opening_found = True
                 paragraph_segment = ""
                 continue
             if "```" in line and opening_found:
                 opening_found = False
-                nodes.append(CodeBlock(code_segment, "code", language))
-                code_segment = ""
+                nodes.append(CodeBlock(block_segment, block_type_code, language))
+                block_segment = ""
                 language = ""
                 continue
-            code_segment += f"{line}\n"
+            block_segment += f"{line}\n"
         if paragraph_segment:
-            nodes.append(BlockNode(paragraph_segment.strip(), "paragraph"))
+            nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
     return nodes
 
 
 def split_blocks_quote(blocks: list[BlockNode]) -> list[BlockNode]:
     nodes: list[BlockNode] = []
     for block in blocks:
-        # Skip if we are not at a block with paragraph type. Let the block
-        # through to the nodes list.
         if block.block_type != block_type_paragraph:
             nodes.append(block)
             continue
         paragraph_segment = ""
-        quote_segment = ""
-        quote_started = False
-        split_block_text = block.block_text.splitlines()
-        for line in split_block_text:
+        block_segment = ""
+        block_started = False
+        for line in block.block_text.splitlines():
+            print(repr(line))
             line = line.strip()
             if not line:
-                # If the current line is an empty string, then that means that
-                # we have a newline markdown block separator here. This could
-                # have come after a paragraph or quote segment, if so, then
-                # create the block nodes for them, and then continue to create
-                # the newline separator block node.
                 if paragraph_segment:
                     nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
                     paragraph_segment = ""
-                if quote_segment:
-                    nodes.append(BlockNode(quote_segment, block_type_quote))
-                    quote_segment = ""
-                    quote_started = False
+                if block_segment:
+                    nodes.append(BlockNode(block_segment, block_type_quote))
+                    block_segment = ""
+                    block_started = False
                 nodes.append(BlockNode("", block_type_newline))
-            if not line.startswith("> ") and not quote_started:
-                # Handle a non-quote line where there was no quote block that
-                # was parsed previously.
+            if not line.startswith("> ") and not block_started:
                 paragraph_segment += line
-            if not line.startswith("> ") and quote_started:
-                # Handle a non-quote line where there was a quote block being
-                # parsed previously.
-                nodes.append(BlockNode(quote_segment, block_type_quote))
-                quote_segment = ""
-                quote_started = False
+            if not line.startswith("> ") and block_started:
+                nodes.append(BlockNode(block_segment, block_type_quote))
+                block_segment = ""
+                block_started = False
             if line.startswith("> "):
-                if not quote_started:
-                    # Suppose that the quote was not started yet. First, there
-                    # could've been a paragraph segement previously, so check
-                    # for that and handle it accordingly.
+                if not block_started:
                     if paragraph_segment:
-                        nodes.append(
-                            BlockNode(f"{paragraph_segment}", block_type_paragraph)
-                        )
+                        nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
                         paragraph_segment = ""
-                    # Flag that the quote block has now started since it was not
-                    # started previously.
-                    quote_started = True
-                # Suppose that the current line has a quote symbol, then
-                # concatenate the line to the quote segment variable.
-                quote_segment += f"{line.lstrip("> ")}\n"
-        # Lastly, the text processing ends at the very last quote segment, but
-        # there could've been paragraph segments following it; therefore, check
-        # for it handle it accordingly.
+                    block_started = True
+                block_segment += f"{line.lstrip("> ")}\n"
         if paragraph_segment:
             nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
     return nodes
