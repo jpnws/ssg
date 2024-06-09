@@ -171,19 +171,19 @@ def split_blocks_unordered_list(blocks: list[BlockNode]) -> list[BlockNode]:
                     block_segment = ""
                     block_started = False
                 nodes.append(BlockNode("", block_type_newline))
-            if not line.startswith("* ") and not block_started:
+            if not re.match(r"^-\s|\*\s", line) and not block_started:
                 paragraph_segment += f"{line}\n"
-            if not line.startswith("* ") and block_started:
+            if not re.match(r"^-\s|\*\s", line) and block_started:
                 nodes.append(BlockNode(block_segment, block_type_unordered_list))
                 block_segment = ""
                 block_started = False
-            if line.startswith("* "):
+            if re.match(r"^-\s|\*\s", line):
                 if not block_started:
                     if paragraph_segment:
                         nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
                         paragraph_segment = ""
                     block_started = True
-                block_segment += f"{line.lstrip("* ")}\n"
+                block_segment += f"{re.sub(r"^-\s|\*\s", "", line)}\n"
         if paragraph_segment:
             nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
             paragraph_segment = ""

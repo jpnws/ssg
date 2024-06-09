@@ -1,4 +1,3 @@
-import pprint
 import unittest
 
 from block.block_node import BlockNode
@@ -68,7 +67,6 @@ class TestSplitBlocks(unittest.TestCase):
         )
         # Act
         actual = split_blocks_code([node])
-        pprint.pp(actual)
         expected = [
             BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
@@ -163,16 +161,15 @@ class TestSplitBlocks(unittest.TestCase):
         """
         # Arrange
         node = BlockNode(
-            "ABC\n\n# Heading 1\n\nABC\n\n```python\n# comment\ndef func():\n    pass\n```\n\nABC\n\n> Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n> Morbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\n> In sagittis consectetur tristique. Sed porttitor mi magna.\n\nABC\n\n* List item 1 (block1)\n* List item 2 (block1)\n\n* List item 1 (block2)\n* List item 2 (block2)\n\nABC\n\nABC\n\n1. List item 1 (block1)\n2. List item 2 (block1)\n\n1. List item 1 (block2)\n2. List item 2 (block2)\n\nABC",
+            "ABC\n\n# Heading 1\n\nABC\n\n```python\n# comment\ndef func():\n    pass\n```\n\nABC\n\n> Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n> Morbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\n> In sagittis consectetur tristique. Sed porttitor mi magna.\n\nABC\n\n* List item 1 (block1)\n- List item 2 (block1)\n\n* List item 1 (block2)\n- List item 2 (block2)\n\nABC\n\nABC\n\n1. List item 1 (block1)\n2. List item 2 (block1)\n\n1. List item 1 (block2)\n2. List item 2 (block2)\n\nABC",
             "paragraph",
         )
         # Act
         actual = split_blocks_code([node])
-        actual = split_blocks_quote(actual)
-        actual = split_blocks_heading(actual)
         actual = split_blocks_unordered_list(actual)
+        actual = split_blocks_quote(actual)
         actual = split_blocks_ordered_list(actual)
-        pprint.pp(actual)
+        actual = split_blocks_heading(actual)
         expected = [
             BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
