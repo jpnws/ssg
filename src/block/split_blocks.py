@@ -230,4 +230,8 @@ def split_blocks_ordered_list(blocks: list[BlockNode]) -> list[BlockNode]:
         if paragraph_segment:
             nodes.append(BlockNode(paragraph_segment, block_type_paragraph))
             paragraph_segment = ""
+        if block_segment:
+            nodes.append(BlockNode(block_segment, block_type_ordered_list))
+            block_segment = ""
+            block_started = False
     return nodes

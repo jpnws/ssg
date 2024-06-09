@@ -49,9 +49,9 @@ class HTMLNode:
         """
         return f"""
         HTMLNode(
-            tag={self.tag},
-            value={self.value},
-            children={self.children}
-            props={self.props}
+            tag={repr(self.tag)},
+            value={repr(self.value)},
+            children={repr(self.children)}
+            props={repr(self.props)}
         )
         """

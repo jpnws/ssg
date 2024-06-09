@@ -32,4 +32,4 @@ class CodeBlock(BlockNode):
         Returns:
             str: A string representation of the CodeBlock object.
         """
-        return f"CodeBlock({self.block_text}, {self.block_type}, {self.block_language})"
+        return f"CodeBlock({repr(self.block_text)}, {repr(self.block_type)}, {repr(self.block_language)})"

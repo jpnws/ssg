@@ -32,4 +32,4 @@ class HeadingBlock(BlockNode):
         Returns:
             str: A string representation of the HeadingBlock object.
         """
-        return f"HeadingBlock({self.block_text}, {self.block_type}, {self.block_level})"
+        return f"HeadingBlock({repr(self.block_text)}, {repr(self.block_type)}, {repr(self.block_level)})"

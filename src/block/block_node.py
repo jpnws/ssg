@@ -29,4 +29,4 @@ class BlockNode:
         Returns:
             str: A string representation of the BlockNode object.
         """
-        return f"BlockNode({self.block_text}, {self.block_type})"
+        return f"BlockNode({repr(self.block_text)}, {repr(self.block_type)})"

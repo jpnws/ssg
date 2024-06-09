@@ -173,7 +173,6 @@ class TestSplitBlocks(unittest.TestCase):
         actual = split_blocks_unordered_list(actual)
         actual = split_blocks_ordered_list(actual)
         pprint.pp(actual)
-
         expected = [
             BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
@@ -198,13 +197,13 @@ class TestSplitBlocks(unittest.TestCase):
             BlockNode("", "newline"),
             BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
             BlockNode("List item 1 (block1)\nList item 2 (block1)\n", "ordered_list"),
             BlockNode("", "newline"),
             BlockNode("List item 1 (block2)\nList item 2 (block2)\n", "ordered_list"),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
         ]
         # Assert
         self.assertListEqual(actual, expected)
