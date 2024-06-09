@@ -14,7 +14,7 @@ class TestHeadingBlock(unittest.TestCase):
     def test_repr(self):
         # Assert
         heading = HeadingBlock("Here is a heading", "heading", 1)
-        expected = "HeadingBlock(Here is a heading, heading, 1)"
+        expected = "HeadingBlock('Here is a heading', 'heading', 1)"
         # Act
         actual = repr(heading)
         # Assert

@@ -8,7 +8,10 @@ class TestHTMLNode(unittest.TestCase):
         self.div_tag: str = "div"
         self.div_value: str = "Hello, World!"
         self.div_props1: dict[str, str | None] = {"class": "container"}
-        self.div_props2: dict[str, str | None] = {"class": "container", "id": "main"}
+        self.div_props2: dict[str, str | None] = {
+            "class": "container",
+            "id": "main",
+        }
 
     def test_init(self):
         """
@@ -60,8 +63,8 @@ class TestHTMLNode(unittest.TestCase):
             res,
             f"""
         HTMLNode(
-            tag={self.div_tag},
-            value={self.div_value},
+            tag='{self.div_tag}',
+            value='{self.div_value}',
             children={sub_node}
             props={self.div_props2}
         )

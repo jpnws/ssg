@@ -25,32 +25,33 @@ class TestSplitBlocks(unittest.TestCase):
         )
         # Act
         actual = split_blocks_heading([node])
+        print(repr(actual))
         expected: list[BlockNode] = [
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
-            HeadingBlock("Heading 1", "heading", 1),
+            HeadingBlock("Heading 1\n", "heading", 1),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
-            HeadingBlock("Heading 2", "heading", 2),
+            HeadingBlock("Heading 2\n", "heading", 2),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
-            HeadingBlock("Heading 3", "heading", 3),
+            HeadingBlock("Heading 3\n", "heading", 3),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
-            HeadingBlock("Heading 4", "heading", 4),
+            HeadingBlock("Heading 4\n", "heading", 4),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
-            HeadingBlock("Heading 5", "heading", 5),
+            HeadingBlock("Heading 5\n", "heading", 5),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
-            HeadingBlock("Heading 6", "heading", 6),
+            HeadingBlock("Heading 6\n", "heading", 6),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
         ]
         # Assert
         self.assertListEqual(actual, expected)
@@ -89,7 +90,7 @@ class TestSplitBlocks(unittest.TestCase):
         # Act
         actual = split_blocks_quote([node])
         expected = [
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
             BlockNode(
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nMorbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\nIn sagittis consectetur tristique. Sed porttitor mi magna.\n",
@@ -101,7 +102,7 @@ class TestSplitBlocks(unittest.TestCase):
                 "quote",
             ),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
         ]
         # Assert
         self.assertListEqual(actual, expected)
@@ -119,13 +120,13 @@ class TestSplitBlocks(unittest.TestCase):
         # Act
         actual = split_blocks_unordered_list([node])
         expected = [
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
             BlockNode("List item 1 (block1)\nList item 2 (block1)\n", "unordered_list"),
             BlockNode("", "newline"),
             BlockNode("List item 1 (block2)\nList item 2 (block2)\n", "unordered_list"),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
         ]
         # Assert
         self.assertListEqual(actual, expected)
@@ -143,13 +144,13 @@ class TestSplitBlocks(unittest.TestCase):
         # Act
         actual = split_blocks_ordered_list([node])
         expected = [
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
             BlockNode("List item 1 (block1)\nList item 2 (block1)\n", "ordered_list"),
             BlockNode("", "newline"),
             BlockNode("List item 1 (block2)\nList item 2 (block2)\n", "ordered_list"),
             BlockNode("", "newline"),
-            BlockNode("ABC", "paragraph"),
+            BlockNode("ABC\n", "paragraph"),
         ]
         # Assert
         self.assertListEqual(actual, expected)

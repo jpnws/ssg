@@ -1,7 +1,6 @@
 import unittest
 
 from inline.text_node import TextNode
-
 from inline.text_to_text_nodes import text_to_text_nodes
 
 text_type_text = "text"

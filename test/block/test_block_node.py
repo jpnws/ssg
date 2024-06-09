@@ -21,7 +21,7 @@ class TestBlockNode(unittest.TestCase):
     def test_repr(self):
         # Arrange
         node = BlockNode("# Heading1", "heading")
-        expected = "BlockNode(# Heading1, heading)"
+        expected = "BlockNode('# Heading1', 'heading')"
         # Act
         actual = repr(node)
         # Arrange

@@ -1,7 +1,6 @@
 import unittest
 
 from inline.split_delimiters import split_nodes_delimiter
-
 from inline.text_node import TextNode
 
 

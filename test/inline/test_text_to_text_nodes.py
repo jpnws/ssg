@@ -1,8 +1,7 @@
 import unittest
 
-from inline.text_node import TextNode
 from html_node import HTMLNode
-
+from inline.text_node import TextNode
 from inline.text_node_to_leaf_node import text_node_to_leaf_node
 
 
