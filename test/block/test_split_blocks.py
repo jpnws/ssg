@@ -25,7 +25,6 @@ class TestSplitBlocks(unittest.TestCase):
         )
         # Act
         actual = split_blocks_heading([node])
-        print(repr(actual))
         expected: list[BlockNode] = [
             BlockNode("ABC\n", "paragraph"),
             BlockNode("", "newline"),
