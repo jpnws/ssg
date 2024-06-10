@@ -92,10 +92,53 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
     html_file_name = os.path.basename(from_path).split(".")[0]
     html_file = f"{html_file_name}.html"
     html_path = os.path.join(dest_path, html_file)
+    print(html_path)
     with open(html_path, "w+") as f:
         f.write(template_contents)
 
 
+def generate_pages_recursive(
+    dir_path_content: str, template_path: str, dest_dir_path: str
+):
+    """
+    Recursively generate all pages.
+
+    Args:
+        - dir_path_content (str): The path to the `content` directory that
+          should be recursed.
+        - template_path (str): The path to the HTML template file.
+        - dest_dir_path (str): The destination folder path to which the
+          generated HTML file should be stored.
+    """
+    print(
+        f"Generating pages from {dir_path_content} to {dest_dir_path} using {template_path}"
+    )
+    if not os.path.exists(dir_path_content):
+        raise FileNotFoundError(
+            f"directory (`{dir_path_content}`) must exist in the project root."
+        )
+    src_paths = [
+        os.path.abspath(os.path.join(dir_path_content, item))
+        for item in os.listdir(dir_path_content)
+    ]
+    generate_pages_func(src_paths, template_path, dest_dir_path)
+
+
+def generate_pages_func(src_paths: list[str], template_path: str, dest_path: str):
+    for src_path in src_paths:
+        if os.path.isdir(src_path):
+            next_src_paths = [
+                os.path.join(src_path, item) for item in os.listdir(src_path)
+            ]
+            generate_pages_func(next_src_paths, template_path, dest_path)
+        if os.path.isfile(src_path):
+            src_dir_path = os.path.dirname(src_path).split("/content")[-1].strip("/")
+            dest_dir_path = os.path.join(dest_path, src_dir_path)
+            print(dest_dir_path)
+            os.makedirs(dest_dir_path, 0o777, True)
+            generate_page(src_path, template_path, dest_dir_path)
+
+
 if __name__ == "__main__":
     copy_static_assets()
-    generate_page("content/index.md", "template.html", "public")
+    generate_pages_recursive("content", "template.html", "public")
