@@ -1,6 +1,9 @@
 import os
 import shutil
 
+from block.block_nodes_to_html_nodes import block_nodes_to_html_nodes
+from block.markdown_to_block_nodes import markdown_to_block_nodes
+
 
 def copy_static_assets():
     """
@@ -58,4 +61,41 @@ def copy_func(src_paths: list[str], dest_path: str):
             shutil.copyfile(src_path, dest_file_path)
 
 
-copy_static_assets()
+def extract_title(markdown: str) -> str:
+    """
+    Extract the title for the page.
+    """
+    for line in markdown.splitlines():
+        if "# " in line:
+            return line.replace("# ", "")
+    raise ValueError("no h1 header found: must have a markdown `#` h1 header.")
+
+
+def generate_page(from_path: str, template_path: str, dest_path: str):
+    """
+    Generate page.
+    """
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    markdown_contents = ""
+    from_path = os.path.abspath(from_path)
+    with open(from_path) as f:
+        markdown_contents = f.read()
+    template_contents = ""
+    with open(template_path) as f:
+        template_contents = f.read()
+    block_nodes = markdown_to_block_nodes(markdown_contents)
+    html_nodes = block_nodes_to_html_nodes(block_nodes)
+    page_html = html_nodes.to_html()
+    page_title = extract_title(markdown_contents)
+    template_contents = template_contents.replace("{{ Title }}", page_title)
+    template_contents = template_contents.replace("{{ Content }}", page_html)
+    html_file_name = os.path.basename(from_path).split(".")[0]
+    html_file = f"{html_file_name}.html"
+    html_path = os.path.join(dest_path, html_file)
+    with open(html_path, "w+") as f:
+        f.write(template_contents)
+
+
+if __name__ == "__main__":
+    copy_static_assets()
+    generate_page("content/index.md", "template.html", "public")

@@ -20,7 +20,7 @@ class LeafNode(HTMLNode):
         Raises:
             ValueError: If the `value` attribute of the LeafNode is not provided.
         """
-        if not self.value:
+        if self.value is None:
             raise ValueError("LeafNode `value` must be provided.")
         if not self.tag:
             return self.value
