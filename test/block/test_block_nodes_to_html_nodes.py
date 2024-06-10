@@ -1,9 +1,12 @@
-import pprint
+# import pprint
 import unittest
 
+from block.block_node import BlockNode
 from block.block_nodes_to_html_nodes import (
     code_block_to_html_node,
     heading_block_to_html_node,
+    quote_block_to_html_node,
+    unordered_list_block_to_html_node,
 )
 from block.code_block import CodeBlock
 from block.heading_block import HeadingBlock
@@ -103,9 +106,59 @@ class TestBlockNodesToHTMLNodes(unittest.TestCase):
         code_block = CodeBlock("# comment\ndef func():\n    pass\n", "code", "python")
         # Act
         actual = code_block_to_html_node(code_block)
-        pprint.pp(actual)
         expected = ParentNode(
             "pre", [LeafNode("code", "# comment\ndef func():\n    pass\n")]
         )
         # Assert
         self.assertEqual(actual, expected)
+
+    def test_quote_block_to_html_node_basic(self):
+        # Arrange
+        quote_block = BlockNode(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nMorbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\nIn sagittis consectetur tristique. Sed porttitor mi magna.\n",
+            "quote",
+        )
+        # Act
+        actual = quote_block_to_html_node(quote_block)
+        expected = ParentNode(
+            "blockquote",
+            [
+                LeafNode(
+                    None,
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nMorbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\nIn sagittis consectetur tristique. Sed porttitor mi magna.\n",
+                )
+            ],
+        )
+        # Arrange
+        self.assertEqual(actual, expected)
+
+    def test_unordered_list_block_to_html_node_basic(self):
+        # Arrange
+        unordered_list_block = BlockNode(
+            "Unordered **list item** 1\nUnordered *list item* 2\n", "unordered_list"
+        )
+        # Act
+        actual = unordered_list_block_to_html_node(unordered_list_block)
+        expect = ParentNode(
+            "ul",
+            [
+                ParentNode(
+                    "li",
+                    [
+                        LeafNode(None, "Unordered "),
+                        LeafNode("b", "list item"),
+                        LeafNode(None, " 1"),
+                    ],
+                ),
+                ParentNode(
+                    "li",
+                    [
+                        LeafNode(None, "Unordered "),
+                        LeafNode("i", "list item"),
+                        LeafNode(None, " 2"),
+                    ],
+                ),
+            ],
+        )
+        # Assert
+        self.assertEqual(actual, expect)
