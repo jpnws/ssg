@@ -5,6 +5,8 @@ from block.block_node import BlockNode
 from block.block_nodes_to_html_nodes import (
     code_block_to_html_node,
     heading_block_to_html_node,
+    ordered_list_block_to_html_node,
+    paragraph_block_to_html_node,
     quote_block_to_html_node,
     unordered_list_block_to_html_node,
 )
@@ -158,6 +160,59 @@ class TestBlockNodesToHTMLNodes(unittest.TestCase):
                         LeafNode(None, " 2"),
                     ],
                 ),
+            ],
+        )
+        # Assert
+        self.assertEqual(actual, expect)
+
+    def test_ordered_list_block_to_html_node_basic(self):
+        # Arrange
+        ordered_list_block = BlockNode(
+            "Ordered **list item** 1\nOrdered *list item* 2\n", "ordered_list"
+        )
+        # Act
+        actual = ordered_list_block_to_html_node(ordered_list_block)
+        expect = ParentNode(
+            "ol",
+            [
+                ParentNode(
+                    "li",
+                    [
+                        LeafNode(None, "Ordered "),
+                        LeafNode("b", "list item"),
+                        LeafNode(None, " 1"),
+                    ],
+                ),
+                ParentNode(
+                    "li",
+                    [
+                        LeafNode(None, "Ordered "),
+                        LeafNode("i", "list item"),
+                        LeafNode(None, " 2"),
+                    ],
+                ),
+            ],
+        )
+        # Assert
+        self.assertEqual(actual, expect)
+
+    def test_paragraph_block_to_html_node_basic(self):
+        # Arrange
+        paragraph_block = BlockNode(
+            "This is a **paragraph** with *italic* and `code`.\n", "paragraph"
+        )
+        # Act
+        actual = paragraph_block_to_html_node(paragraph_block)
+        expect = ParentNode(
+            "p",
+            [
+                LeafNode(None, "This is a "),
+                LeafNode("b", "paragraph"),
+                LeafNode(None, " with "),
+                LeafNode("i", "italic"),
+                LeafNode(None, " and "),
+                LeafNode("code", "code"),
+                LeafNode(None, ".\n"),
             ],
         )
         # Assert

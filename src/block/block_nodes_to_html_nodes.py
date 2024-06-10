@@ -9,6 +9,8 @@ from parent_node import ParentNode
 from util import (
     block_type_code,
     block_type_heading,
+    block_type_ordered_list,
+    block_type_paragraph,
     block_type_quote,
     block_type_unordered_list,
 )
@@ -61,11 +63,26 @@ def unordered_list_block_to_html_node(block_node: BlockNode) -> HTMLNode:
     return ParentNode("ul", parent_nodes)
 
 
-# def ordered_list_block_to_html_node(block_node: BlockNode) -> HTMLNode:
-#     if block_node.block_type != block_type_ordered_list:
-#         raise ValueError("Invalid block type: must be an ordered list block.")
+def ordered_list_block_to_html_node(block_node: BlockNode) -> HTMLNode:
+    if block_node.block_type != block_type_ordered_list:
+        raise ValueError("Invalid block type: must be an ordered list block.")
+    parent_nodes: list[HTMLNode] = []
+    for line in block_node.block_text.splitlines():
+        text_nodes = text_to_text_nodes(line)
+        leaf_nodes: list[HTMLNode] = []
+        for text_node in text_nodes:
+            leaf_node = text_node_to_leaf_node(text_node)
+            leaf_nodes.append(leaf_node)
+        parent_nodes.append(ParentNode("li", leaf_nodes))
+    return ParentNode("ol", parent_nodes)
 
 
-# def paragraph_block_to_html_node(block_node: BlockNode) -> HTMLNode:
-#     if block_node.block_type != block_type_paragraph:
-#         raise ValueError("Invalid block type: must be a paragraph block.")
+def paragraph_block_to_html_node(block_node: BlockNode) -> HTMLNode:
+    if block_node.block_type != block_type_paragraph:
+        raise ValueError("Invalid block type: must be a paragraph block.")
+    text_nodes = text_to_text_nodes(block_node.block_text)
+    leaf_nodes: list[HTMLNode] = []
+    for text_node in text_nodes:
+        leaf_node = text_node_to_leaf_node(text_node)
+        leaf_nodes.append(leaf_node)
+    return ParentNode("p", leaf_nodes)
