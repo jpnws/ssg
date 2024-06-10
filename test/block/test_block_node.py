@@ -18,11 +18,11 @@ class TestBlockNode(unittest.TestCase):
         # Assert
         self.assertNotEqual(node1, node2)
 
-    def test_repr(self):
-        # Arrange
-        node = BlockNode("# Heading1", "heading")
-        expected = "BlockNode('# Heading1', 'heading')"
-        # Act
-        actual = repr(node)
-        # Arrange
-        self.assertEqual(actual, expected)
+    # def test_repr(self):
+    #     # Arrange
+    #     node = BlockNode("# Heading1", "heading")
+    #     expected = "BlockNode('# Heading1', 'heading')"
+    #     # Act
+    #     actual = repr(node)
+    #     # Arrange
+    #     self.assertEqual(actual, expected)

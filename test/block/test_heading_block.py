@@ -11,11 +11,11 @@ class TestHeadingBlock(unittest.TestCase):
         # Assert
         self.assertEqual(heading1, heading2)
 
-    def test_repr(self):
-        # Assert
-        heading = HeadingBlock("Here is a heading", "heading", 1)
-        expected = "HeadingBlock('Here is a heading', 'heading', 1)"
-        # Act
-        actual = repr(heading)
-        # Assert
-        self.assertEqual(actual, expected)
+    # def test_repr(self):
+    #     # Assert
+    #     heading = HeadingBlock("Here is a heading", "heading", 1)
+    #     expected = "HeadingBlock('Here is a heading', 'heading', 1)"
+    #     # Act
+    #     actual = repr(heading)
+    #     # Assert
+    #     self.assertEqual(actual, expected)

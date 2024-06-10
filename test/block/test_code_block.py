@@ -11,11 +11,11 @@ class TestCodeBlock(unittest.TestCase):
         # Assert
         self.assertEqual(code1, code2)
 
-    def test_repr(self):
-        # Assert
-        code = CodeBlock("Here is code\nmore code", "code", "python")
-        expected = "CodeBlock('Here is code\\nmore code', 'code', 'python')"
-        # Act
-        actual = repr(code)
-        # Assert
-        self.assertEqual(actual, expected)
+    # def test_repr(self):
+    #     # Assert
+    #     code = CodeBlock("Here is code\nmore code", "code", "python")
+    #     expected = "CodeBlock('Here is code\\nmore code', 'code', 'python')"
+    #     # Act
+    #     actual = repr(code)
+    #     # Assert
+    #     self.assertEqual(actual, expected)

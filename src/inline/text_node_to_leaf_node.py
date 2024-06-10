@@ -1,4 +1,3 @@
-from html_node import HTMLNode
 from inline.text_node import TextNode
 from leaf_node import LeafNode
 from util import (
@@ -11,9 +10,9 @@ from util import (
 )
 
 
-def text_node_to_leaf_node(text_node: TextNode) -> HTMLNode:
+def text_node_to_leaf_node(text_node: TextNode) -> LeafNode:
     """
-    Convert TextNode to HTMLNode/LeafNode.
+    Convert TextNode to LeafNode.
     """
     if text_node.text_type == text_type_text:
         return LeafNode(None, text_node.text)

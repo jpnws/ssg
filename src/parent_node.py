@@ -32,3 +32,16 @@ class ParentNode(HTMLNode):
         props_html = self.props_to_html()
         start_tag = f"<{self.tag} {props_html}>" if props_html else f"<{self.tag}>"
         return f"{start_tag}{"".join(nodes)}</{self.tag}>"
+
+    def __eq__(self, other: object) -> bool:
+        """
+        Args:
+            -
+        """
+        if not isinstance(other, ParentNode):
+            return False
+        return (
+            self.tag == other.tag
+            and self.children == other.children
+            and self.props == other.props
+        )

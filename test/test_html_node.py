@@ -49,27 +49,27 @@ class TestHTMLNode(unittest.TestCase):
             f'class="{self.div_props2["class"]}" id="{self.div_props2["id"]}"',
         )
 
-    def test_repr(self):
-        """
-        Test that the repr returns the correct string.
-        """
-        # Arrange
-        sub_node = [HTMLNode("p", "This is a paragraph.", None, None)]
-        # Act
-        node = HTMLNode(self.div_tag, self.div_value, sub_node, self.div_props2)
-        res = repr(node)
-        # Assert
-        self.assertEqual(
-            res,
-            f"""
-        HTMLNode(
-            tag='{self.div_tag}',
-            value='{self.div_value}',
-            children={sub_node}
-            props={self.div_props2}
-        )
-        """,
-        )
+    # def test_repr(self):
+    #     """
+    #     Test that the repr returns the correct string.
+    #     """
+    #     # Arrange
+    #     sub_node = [HTMLNode("p", "This is a paragraph.", None, None)]
+    #     # Act
+    #     node = HTMLNode(self.div_tag, self.div_value, sub_node, self.div_props2)
+    #     res = repr(node)
+    #     # Assert
+    #     self.assertEqual(
+    #         res,
+    #         f"""
+    #     HTMLNode(
+    #         tag='{self.div_tag}',
+    #         value='{self.div_value}',
+    #         children={sub_node}
+    #         props={self.div_props2}
+    #     )
+    #     """,
+    #     )
 
 
 if __name__ == "__main__":

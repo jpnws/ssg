@@ -27,3 +27,15 @@ class LeafNode(HTMLNode):
         props = self.props_to_html()
         start_tag = f"<{self.tag} {props}>" if props else f"<{self.tag}>"
         return f"{start_tag}{self.value}</{self.tag}>"
+
+    def __repr__(self) -> str:
+        """
+        Returns a string representation of the LeafNode object.
+        """
+        return f"""
+        LeafNode(
+            tag={repr(self.tag)},
+            value={repr(self.value)},
+            children={repr(self.children)}
+            props={repr(self.props)}
+        )"""

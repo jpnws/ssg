@@ -47,11 +47,39 @@ class HTMLNode:
         """
         Returns a string representation of the HTMLNode object.
         """
+
+        def func(node: HTMLNode) -> str:
+            return f"{node}"
+
+        children_nodes = None
+        if self.children:
+            children_list = list(map(func, self.children))
+            children_string = "".join(children_list)
+            children_nodes = f"""
+    [
+        {children_string}
+    ]"""
         return f"""
-        HTMLNode(
-            tag={repr(self.tag)},
-            value={repr(self.value)},
-            children={repr(self.children)}
-            props={repr(self.props)}
-        )
+HTMLNode(
+    tag={repr(self.tag)},
+    value={repr(self.value)},
+    children={children_nodes}
+    props={repr(self.props)}
+)"""
+
+    def __eq__(self, other: object) -> bool:
         """
+        Test that the current instance of HTMLNode is equal to the `other`
+        object.
+
+        Args:
+            - other (HTMLNode): The other HTMLNode to compare with.
+        """
+        if not isinstance(other, HTMLNode):
+            return False
+        return (
+            self.tag == other.tag
+            and self.value == other.value
+            and self.children == other.children
+            and self.props == other.props
+        )
