@@ -1,7 +1,11 @@
 import pprint
 import unittest
 
-from block.block_nodes_to_html_nodes import heading_block_to_html_node
+from block.block_nodes_to_html_nodes import (
+    code_block_to_html_node,
+    heading_block_to_html_node,
+)
+from block.code_block import CodeBlock
 from block.heading_block import HeadingBlock
 from leaf_node import LeafNode
 from parent_node import ParentNode
@@ -27,7 +31,6 @@ class TestBlockNodesToHTMLNodes(unittest.TestCase):
         heading6 = HeadingBlock("Heading 6", "heading", 6)
         # Act
         actual1 = heading_block_to_html_node(heading1)
-        pprint.pp(actual1)
         actual2 = heading_block_to_html_node(heading2)
         actual3 = heading_block_to_html_node(heading3)
         actual4 = heading_block_to_html_node(heading4)
@@ -55,7 +58,6 @@ class TestBlockNodesToHTMLNodes(unittest.TestCase):
         # Act
         actual_with_bold = heading_block_to_html_node(heading_with_bold)
         actual_with_italic = heading_block_to_html_node(heading_with_italic)
-        pprint.pp(actual_with_italic)
         actual_with_code = heading_block_to_html_node(heading_with_code)
         actual_with_link = heading_block_to_html_node(heading_with_link)
         actual_with_image = heading_block_to_html_node(heading_with_image)
@@ -95,3 +97,15 @@ class TestBlockNodesToHTMLNodes(unittest.TestCase):
         # Act / Assert
         with self.assertRaises(ValueError):
             heading_block_to_html_node(heading)
+
+    def test_code_block_to_html_node_basic(self):
+        # Arrange
+        code_block = CodeBlock("# comment\ndef func():\n    pass\n", "code", "python")
+        # Act
+        actual = code_block_to_html_node(code_block)
+        pprint.pp(actual)
+        expected = ParentNode(
+            "pre", [LeafNode("code", "# comment\ndef func():\n    pass\n")]
+        )
+        # Assert
+        self.assertEqual(actual, expected)

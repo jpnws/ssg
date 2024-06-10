@@ -1,11 +1,13 @@
 from block.block_node import BlockNode
+from block.code_block import CodeBlock
 from block.heading_block import HeadingBlock
 from html_node import HTMLNode
 from inline.text_node_to_leaf_node import text_node_to_leaf_node
 from inline.text_to_text_nodes import text_to_text_nodes
+from leaf_node import LeafNode
 from parent_node import ParentNode
 from util import (
-    # block_type_code,
+    block_type_code,
     block_type_heading,
 )
 
@@ -26,9 +28,10 @@ def heading_block_to_html_node(heading_block: HeadingBlock) -> HTMLNode:
     return ParentNode(html_tag, leaf_nodes)
 
 
-# def code_block_to_html_node(block_node: BlockNode) -> HTMLNode:
-#     if block_node.block_type != block_type_code:
-#         raise ValueError("Invalid block type: must be a code block.")
+def code_block_to_html_node(code_block: CodeBlock) -> HTMLNode:
+    if code_block.block_type != block_type_code:
+        raise ValueError("Invalid block type: must be a code block.")
+    return ParentNode("pre", [LeafNode("code", code_block.block_text)])
 
 
 # def quote_block_to_html_node(block_node: BlockNode) -> HTMLNode:
