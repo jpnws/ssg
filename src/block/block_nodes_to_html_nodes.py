@@ -16,8 +16,28 @@ from util import (
 )
 
 
-def block_nodes_to_html_nodes(block_nodes: list[BlockNode]) -> list[HTMLNode]:
-    raise NotImplementedError
+def block_nodes_to_html_nodes(
+    block_nodes: list[BlockNode],
+) -> HTMLNode:
+    html_nodes: list[HTMLNode] = []
+    for block_node in block_nodes:
+        if block_node.block_type == block_type_heading and isinstance(
+            block_node, HeadingBlock
+        ):
+            html_nodes.append(heading_block_to_html_node(block_node))
+        elif block_node.block_type == block_type_code and isinstance(
+            block_node, CodeBlock
+        ):
+            html_nodes.append(code_block_to_html_node(block_node))
+        elif block_node.block_type == block_type_quote:
+            html_nodes.append(quote_block_to_html_node(block_node))
+        elif block_node.block_type == block_type_unordered_list:
+            html_nodes.append(unordered_list_block_to_html_node(block_node))
+        elif block_node.block_type == block_type_ordered_list:
+            html_nodes.append(ordered_list_block_to_html_node(block_node))
+        elif block_node.block_type == block_type_paragraph:
+            html_nodes.append(paragraph_block_to_html_node(block_node))
+    return ParentNode("div", html_nodes)
 
 
 def heading_block_to_html_node(heading_block: HeadingBlock) -> HTMLNode:

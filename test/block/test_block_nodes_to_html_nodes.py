@@ -3,6 +3,7 @@ import unittest
 
 from block.block_node import BlockNode
 from block.block_nodes_to_html_nodes import (
+    block_nodes_to_html_nodes,
     code_block_to_html_node,
     heading_block_to_html_node,
     ordered_list_block_to_html_node,
@@ -17,6 +18,101 @@ from parent_node import ParentNode
 
 
 class TestBlockNodesToHTMLNodes(unittest.TestCase):
+    def test_block_nodes_to_html_nodes(self):
+        # Arrange
+        heading = HeadingBlock("Heading", "heading", 1)
+        code = CodeBlock("# comment\ndef func():\n    pass\n", "code", "python")
+        quote = BlockNode(
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nMorbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\nIn sagittis consectetur tristique. Sed porttitor mi magna.\n",
+            "quote",
+        )
+        unordered_list = BlockNode(
+            "Unordered **list item** 1\nUnordered *list item* 2\n", "unordered_list"
+        )
+        ordered_list = BlockNode(
+            "Ordered **list item** 1\nOrdered *list item* 2\n", "ordered_list"
+        )
+        paragraph = BlockNode(
+            "This is a **paragraph** with *italic* and `code`.\n", "paragraph"
+        )
+        block_nodes = [heading, code, quote, unordered_list, ordered_list, paragraph]
+        # Act
+        actual = block_nodes_to_html_nodes(block_nodes)
+        expected = ParentNode(
+            "div",
+            [
+                ParentNode("h1", [LeafNode(None, "Heading")]),
+                ParentNode(
+                    "pre", [LeafNode("code", "# comment\ndef func():\n    pass\n")]
+                ),
+                ParentNode(
+                    "blockquote",
+                    [
+                        LeafNode(
+                            None,
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nMorbi quis interdum nunc. Aenean rutrum pretium eros, non placerat est rhoncus ultricies.\nIn sagittis consectetur tristique. Sed porttitor mi magna.\n",
+                        )
+                    ],
+                ),
+                ParentNode(
+                    "ul",
+                    [
+                        ParentNode(
+                            "li",
+                            [
+                                LeafNode(None, "Unordered "),
+                                LeafNode("b", "list item"),
+                                LeafNode(None, " 1"),
+                            ],
+                        ),
+                        ParentNode(
+                            "li",
+                            [
+                                LeafNode(None, "Unordered "),
+                                LeafNode("i", "list item"),
+                                LeafNode(None, " 2"),
+                            ],
+                        ),
+                    ],
+                ),
+                ParentNode(
+                    "ol",
+                    [
+                        ParentNode(
+                            "li",
+                            [
+                                LeafNode(None, "Ordered "),
+                                LeafNode("b", "list item"),
+                                LeafNode(None, " 1"),
+                            ],
+                        ),
+                        ParentNode(
+                            "li",
+                            [
+                                LeafNode(None, "Ordered "),
+                                LeafNode("i", "list item"),
+                                LeafNode(None, " 2"),
+                            ],
+                        ),
+                    ],
+                ),
+                ParentNode(
+                    "p",
+                    [
+                        LeafNode(None, "This is a "),
+                        LeafNode("b", "paragraph"),
+                        LeafNode(None, " with "),
+                        LeafNode("i", "italic"),
+                        LeafNode(None, " and "),
+                        LeafNode("code", "code"),
+                        LeafNode(None, ".\n"),
+                    ],
+                ),
+            ],
+        )
+        # Assert
+        self.assertEqual(actual, expected)
+
     def test_heading_block_to_html_node_basic(self):
         # Arrange
         heading = HeadingBlock("ABC Heading", "heading", 1)
