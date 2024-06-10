@@ -33,6 +33,30 @@ class ParentNode(HTMLNode):
         start_tag = f"<{self.tag} {props_html}>" if props_html else f"<{self.tag}>"
         return f"{start_tag}{"".join(nodes)}</{self.tag}>"
 
+    def __repr__(self) -> str:
+        """
+        Returns a string representation of the ParentNode object.
+        """
+
+        def func(node: HTMLNode) -> str:
+            return f"{node}"
+
+        children_nodes = None
+        if self.children:
+            children_list = list(map(func, self.children))
+            children_string = "".join(children_list)
+            children_nodes = f"""
+    [
+        {children_string}
+    ]"""
+        return f"""
+ParentNode(
+    tag={repr(self.tag)},
+    value={repr(self.value)},
+    children={children_nodes}
+    props={repr(self.props)}
+)"""
+
     def __eq__(self, other: object) -> bool:
         """
         Args:
