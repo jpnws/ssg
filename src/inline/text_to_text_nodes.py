@@ -16,4 +16,5 @@ def text_to_text_nodes(text: str) -> list[TextNode]:
     res = split_nodes_delimiter(res, "**", text_type_bold)
     res = split_nodes_delimiter(res, "`", text_type_code)
     res = split_nodes_delimiter(res, "*", text_type_italic)
+    res = split_nodes_delimiter(res, "_", text_type_italic)
     return res
