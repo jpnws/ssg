@@ -59,6 +59,26 @@ class TestParentNode(unittest.TestCase):
             "<div><div><p><b>Bold text</b></p>Normal text</div><i>italic text</i></div>",
         )
 
+    def test_to_html_for_empty_tag(self):
+        """Ensure that the call to to_html raises a ValueError for empty tag"""
+        # Arrange
+        node = ParentNode("", [])
+        # Act / Assert
+        with self.assertRaises(ValueError) as context:
+            node.to_html()
+        self.assertEqual(str(context.exception), "Tag must be provided.")
+
+    def test_to_html_for_empty_children(self):
+        """
+        Ensure that the call to to_html raises a ValueError for empty children.
+        """
+        # Arrange
+        node = ParentNode("p", [])
+        # Act / Assert
+        with self.assertRaises(ValueError) as context:
+            node.to_html()
+        self.assertEqual(str(context.exception), "Children nodes must be provided.")
+
 
 if __name__ == "__main__":
     unittest.main()
