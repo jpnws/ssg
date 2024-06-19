@@ -1,8 +1,8 @@
 import os
 import shutil
 
-from block.block_nodes_to_html_nodes import block_nodes_to_html_nodes
-from block.markdown_to_block_nodes import markdown_to_block_nodes
+from .block.block_nodes_to_html_nodes import block_nodes_to_html_nodes
+from .block.markdown_to_block_nodes import markdown_to_block_nodes
 
 
 def copy_static_assets():

@@ -1,4 +1,4 @@
-from html_node import HTMLNode
+from .html_node import HTMLNode
 
 
 class ParentNode(HTMLNode):
@@ -27,7 +27,7 @@ class ParentNode(HTMLNode):
         nodes: list[str] = []
         for node in self.children:
             # Recursion happens here because `node.to_html` calls its own
-            # childrens' `to_html` as well.
+            # children's `to_html` as well.
             nodes.append(node.to_html())
         props_html = self.props_to_html()
         start_tag = f"<{self.tag} {props_html}>" if props_html else f"<{self.tag}>"
