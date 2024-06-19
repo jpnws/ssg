@@ -1,7 +1,7 @@
 import unittest
 
-from inline.text_node import TextNode
-from inline.text_to_text_nodes import text_to_text_nodes
+from src.inline.text_node import TextNode
+from src.inline.text_to_text_nodes import text_to_text_nodes
 
 text_type_text = "text"
 text_type_bold = "bold"

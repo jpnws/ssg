@@ -1,9 +1,9 @@
 import unittest
 
-from block.block_node import BlockNode
-from block.code_block import CodeBlock
-from block.heading_block import HeadingBlock
-from block.markdown_to_block_nodes import (
+from src.block.block_node import BlockNode
+from src.block.code_block import CodeBlock
+from src.block.heading_block import HeadingBlock
+from src.block.markdown_to_block_nodes import (
     markdown_to_block_nodes,
     split_blocks_code,
     split_blocks_heading,

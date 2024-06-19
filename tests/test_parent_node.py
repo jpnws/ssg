@@ -1,7 +1,7 @@
 import unittest
 
-from leaf_node import LeafNode
-from parent_node import ParentNode
+from src.leaf_node import LeafNode
+from src.parent_node import ParentNode
 
 
 class TestParentNode(unittest.TestCase):
@@ -78,7 +78,3 @@ class TestParentNode(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             node.to_html()
         self.assertEqual(str(context.exception), "Children nodes must be provided.")
-
-
-if __name__ == "__main__":
-    unittest.main()

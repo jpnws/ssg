@@ -1,4 +1,4 @@
-from block.block_node import BlockNode
+from .block_node import BlockNode
 
 
 class CodeBlock(BlockNode):
@@ -27,7 +27,7 @@ class CodeBlock(BlockNode):
 
     def __repr__(self) -> str:
         """
-        Returns astring representation of the CodeBlock object.
+        Returns a string representation of the CodeBlock object.
 
         Returns:
             str: A string representation of the CodeBlock object.

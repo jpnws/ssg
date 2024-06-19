@@ -37,7 +37,7 @@ class HTMLNode:
         """
         if not self.props:
             return ""
-        func: Callable[[tuple[str, str | None]], str] = (
+        func: Callable[[tuple[str, str | None]], str] = (  # noqa: E731
             lambda prop: f'{prop[0]}="{prop[1]}"'
         )
         props = list(map(func, self.props.items()))

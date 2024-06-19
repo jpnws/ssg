@@ -1,6 +1,6 @@
 import unittest
 
-from leaf_node import LeafNode
+from src.leaf_node import LeafNode
 
 
 class TestLeafNode(unittest.TestCase):
@@ -64,7 +64,3 @@ class TestLeafNode(unittest.TestCase):
         res = leafnode.to_html()
         # Assert
         self.assertEqual(res, self.p_value)
-
-
-if __name__ == "__main__":
-    unittest.main()

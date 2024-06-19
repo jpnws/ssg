@@ -1,8 +1,8 @@
 import unittest
 
-from html_node import HTMLNode
-from inline.text_node import TextNode
-from inline.text_node_to_leaf_node import text_node_to_leaf_node
+from src.html_node import HTMLNode
+from src.inline.text_node import TextNode
+from src.inline.text_node_to_leaf_node import text_node_to_leaf_node
 
 
 class TestTextNodeToLeafNode(unittest.TestCase):

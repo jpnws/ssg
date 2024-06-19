@@ -1,12 +1,9 @@
-from block.block_node import BlockNode
-from block.code_block import CodeBlock
-from block.heading_block import HeadingBlock
-from html_node import HTMLNode
-from inline.text_node_to_leaf_node import text_node_to_leaf_node
-from inline.text_to_text_nodes import text_to_text_nodes
-from leaf_node import LeafNode
-from parent_node import ParentNode
-from util import (
+from src.html_node import HTMLNode
+from src.inline.text_node_to_leaf_node import text_node_to_leaf_node
+from src.inline.text_to_text_nodes import text_to_text_nodes
+from src.leaf_node import LeafNode
+from src.parent_node import ParentNode
+from src.util import (
     block_type_code,
     block_type_heading,
     block_type_ordered_list,
@@ -14,6 +11,10 @@ from util import (
     block_type_quote,
     block_type_unordered_list,
 )
+
+from .block_node import BlockNode
+from .code_block import CodeBlock
+from .heading_block import HeadingBlock
 
 
 def block_nodes_to_html_nodes(

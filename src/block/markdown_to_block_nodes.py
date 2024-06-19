@@ -1,9 +1,6 @@
 import re
 
-from block.block_node import BlockNode
-from block.code_block import CodeBlock
-from block.heading_block import HeadingBlock
-from util import (
+from src.util import (
     block_type_code,
     block_type_heading,
     block_type_newline,
@@ -12,6 +9,10 @@ from util import (
     block_type_quote,
     block_type_unordered_list,
 )
+
+from .block_node import BlockNode
+from .code_block import CodeBlock
+from .heading_block import HeadingBlock
 
 
 def markdown_to_block_nodes(markdown: str) -> list[BlockNode]:

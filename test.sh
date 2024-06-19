@@ -1,1 +1,1 @@
-python -m unittest ./test/blocks/test_blocknode.py
+python -m unittest discover -s tests -p test_*
