@@ -75,7 +75,7 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
     """
     Generate page.
     """
-    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    # print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     markdown_contents = ""
     from_path = os.path.abspath(from_path)
     with open(from_path) as f:
@@ -92,7 +92,6 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
     html_file_name = os.path.basename(from_path).split(".")[0]
     html_file = f"{html_file_name}.html"
     html_path = os.path.join(dest_path, html_file)
-    print(html_path)
     with open(html_path, "w+") as f:
         f.write(template_contents)
 
@@ -110,9 +109,9 @@ def generate_pages_recursive(
         - dest_dir_path (str): The destination folder path to which the
           generated HTML file should be stored.
     """
-    print(
-        f"Generating pages from {dir_path_content} to {dest_dir_path} using {template_path}"
-    )
+    # print(
+    # f"Generating pages from {dir_path_content} to {dest_dir_path} using {template_path}"
+    # )
     if not os.path.exists(dir_path_content):
         raise FileNotFoundError(
             f"directory (`{dir_path_content}`) must exist in the project root."
@@ -134,7 +133,6 @@ def generate_pages_func(src_paths: list[str], template_path: str, dest_path: str
         if os.path.isfile(src_path):
             src_dir_path = os.path.dirname(src_path).split("/content")[-1].strip("/")
             dest_dir_path = os.path.join(dest_path, src_dir_path)
-            print(dest_dir_path)
             os.makedirs(dest_dir_path, 0o777, True)
             generate_page(src_path, template_path, dest_dir_path)
 

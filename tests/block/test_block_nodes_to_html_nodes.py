@@ -1,4 +1,3 @@
-# import pprint
 import unittest
 
 from src.block.block_node import BlockNode

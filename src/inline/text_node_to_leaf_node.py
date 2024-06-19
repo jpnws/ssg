@@ -1,5 +1,6 @@
-from src.leaf_node import LeafNode
-from src.util import (
+from inline.text_node import TextNode
+from leaf_node import LeafNode
+from util import (
     text_type_bold,
     text_type_code,
     text_type_image,
@@ -7,8 +8,6 @@ from src.util import (
     text_type_link,
     text_type_text,
 )
-
-from .text_node import TextNode
 
 
 def text_node_to_leaf_node(text_node: TextNode) -> LeafNode:

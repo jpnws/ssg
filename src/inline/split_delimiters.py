@@ -1,8 +1,7 @@
-from src.util import (
+from inline.text_node import TextNode
+from util import (
     text_type_text,
 )
-
-from .text_node import TextNode
 
 
 def split_nodes_delimiter(

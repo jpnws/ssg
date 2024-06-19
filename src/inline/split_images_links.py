@@ -1,13 +1,12 @@
 from typing import Callable
 
-from src.util import (
+from inline.extract_images_links import extract_markdown_images, extract_markdown_links
+from inline.text_node import TextNode
+from util import (
     text_type_image,
     text_type_link,
     text_type_text,
 )
-
-from .extract_images_links import extract_markdown_images, extract_markdown_links
-from .text_node import TextNode
 
 
 def split_nodes_image(old_nodes: list[TextNode]) -> list[TextNode]:

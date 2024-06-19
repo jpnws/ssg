@@ -1,4 +1,4 @@
-from .block_node import BlockNode
+from block.block_node import BlockNode
 
 
 class CodeBlock(BlockNode):
