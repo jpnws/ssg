@@ -196,7 +196,7 @@ def splitter(text: str, delim: str, text_type: str) -> list[TextNode]:
             # index by the length of the delimiter because in the next loop, we
             # want to just see the delimited text string instead of another
             # character of delimiter itself if the delimiter string is more than
-            # one cahracter long such as `**` for bold.
+            # one character long such as `**` for bold.
             index += len(delim)
         else:
             # Otherwise, if the current substring is not a delimiter, just
