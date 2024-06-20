@@ -11,9 +11,7 @@ from .text_node import TextNode
 
 
 def text_node_to_leaf_node(text_node: TextNode) -> LeafNode:
-    """
-    Convert TextNode to LeafNode.
-    """
+    """Convert TextNode to LeafNode."""
     if text_node.text_type == text_type_text:
         return LeafNode(None, text_node.text)
     if text_node.text_type == text_type_bold:
